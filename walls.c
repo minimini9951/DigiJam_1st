@@ -1,7 +1,9 @@
+//#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 #include "cprocessing.h"
 #include "walls.h"
+#include "utils.h"
 #include <stdlib.h>
-#include <math.h>
+#include <stdio.h>
 
 int walls_count()
 {
@@ -9,37 +11,53 @@ int walls_count()
 	return random_number;
 }
 
-void walls_position(struct HEXAGON* hexagon, int random_number, int arr[])
+void walls_position(struct HEXAGON* hexagon, int random_number)
 {
-	int* new_arr = (int*)malloc(sizeof(int) * random_number);
 	for (int i = 0; i < random_number; i++)
 	{
-		*(new_arr + i) = arr[i];
+		int n = CP_Random_RangeInt(0, 5);
+		hexagon->arr[n] = 1;
 	}
-
-	if(hexagon->pos != NULL)
-		free(hexagon->pos);
-
-	hexagon->pos = new_arr;
 }
 
-void draw_walls(struct HEXAGON* hexagon, int amount, int* pos)
+int move_to_angle(float move)
 {
-	for (int i = 0; i < amount; i++)
+	if (move >= 0)
 	{
-		float x1 = hexagon->center.x + hexagon->radius * cosf(CP_Math_Radians(30 + hexagon->angle + 60 * (pos[i] - 1)));
-		float y1 = hexagon->center.y + hexagon->radius * sinf(CP_Math_Radians(30 + hexagon->angle + 60 * (pos[i] - 1)));
-		float x2 = hexagon->center.x + hexagon->radius * cosf(CP_Math_Radians(30 + hexagon->angle + 60 * (pos[i])));
-		float y2 = hexagon->center.y + hexagon->radius * sinf(CP_Math_Radians(30 + hexagon->angle + 60 * (pos[i])));
-
-		CP_Graphics_DrawLine(x1, y1, x2, y2);
+		int m = (int)move / 360;
+		return (int)move - 360 * m;
+	}
+	else
+	{
+		int m = -1 * (int)move / 360 + 1;
+		return 360 * m + (int)move;
 	}
 }
 
-void move_walls()
+int get_area_index(int angle)
 {
+	if (angle > 330 || angle < 30)
+		return 0;
+	else
+	{
+		int area = ((angle / 60) % 6);
+		return area;
+	}
 }
 
-void make_wall()
+void make_wall(struct HEXAGON* hexagon, struct CHARACTER* character)
 {
+	int p_angle = move_to_angle(character->move);
+	character->area = get_area_index(p_angle);
+	printf("%d %d %d %d %d %d   %d %f\n", hexagon->arr[0], hexagon->arr[1], hexagon->arr[2], hexagon->arr[3], hexagon->arr[4], hexagon->arr[5], character->area, character->move);
+	for (int i = 0; i < 6; i++)
+	{
+		if (character->area == i && hexagon->arr[i] == 0)
+		hexagon->arr[i] = 1;
+	}
+}
+
+void check_walls()
+{
+
 }

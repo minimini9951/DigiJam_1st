@@ -1,4 +1,5 @@
 #include "cprocessing.h"
+#include "time.h"
 
 void swap(int* a, int* b)
 {
@@ -16,4 +17,9 @@ void randomize(int arr[], int n)
 
         swap(&arr[i], &arr[j]);
     }
+}
+
+float lerp(float a, float b, float v)
+{
+    return a + v * (b - a);
 }

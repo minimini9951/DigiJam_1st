@@ -14,6 +14,9 @@
     <ClCompile Include="utils.c">
       <Filter>Source file</Filter>
     </ClCompile>
+    <ClCompile Include="draw.c">
+      <Filter>Source file</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header file">
@@ -34,6 +37,9 @@
       <Filter>Header file</Filter>
     </ClInclude>
     <ClInclude Include="utils.h">
+      <Filter>Header file</Filter>
+    </ClInclude>
+    <ClInclude Include="draw.h">
       <Filter>Header file</Filter>
     </ClInclude>
   </ItemGroup>

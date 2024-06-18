@@ -3,29 +3,35 @@
 #include "move.h"
 #include "collision.h"
 #include "utils.h"
+#include "draw.h"
 #include <math.h>
 
-#define PI 3.141592
+int g_arr[6] = { 0, 1, 2, 3, 4, 5 };
+int g_n = sizeof(g_arr) / sizeof(g_arr[0]);
 
-int arr[] = { 1, 2, 3, 4, 5, 6 };
-int n = sizeof(arr) / sizeof(arr[0]);
-
-struct HEXAGON hexa;
+struct HEXAGON g_hexa;
+struct CHARACTER g_char;
 
 void game_init(void)
 {
-	// CP_System_Fullscreen();
 	int display_height = CP_System_GetDisplayHeight();
 	CP_System_SetWindowSize(display_height, display_height);
-	hexa.angle = 0;
-	const float k = 0.75;
+	g_hexa.angle = 0;
+	const float k = 1;
 
-	hexa.center.x = CP_System_GetDisplayHeight() / 2.0f;
-	hexa.center.y = CP_System_GetDisplayHeight() / 2.0f;
+	g_hexa.center.x = CP_System_GetDisplayHeight() / 2.0f;
+	g_hexa.center.y = CP_System_GetDisplayHeight() / 2.0f;
 
-	hexa.radius = display_height / 2 * k;
+	g_hexa.radius = display_height / 2 * k;
+	g_hexa.max_radius = g_hexa.radius;
+	g_hexa.min_radius = g_hexa.radius / 5;
 
-	hexa.pos = NULL;
+	for (int i = 0; i < g_n; i++)
+	{
+		g_hexa.arr[i] = 0;
+	}
+	g_hexa.amount = walls_count();
+	walls_position(&g_hexa, g_hexa.amount);
 }
 
 void game_update(void)
@@ -35,15 +41,19 @@ void game_update(void)
 	CP_Graphics_ClearBackground(black);
 	CP_Settings_Stroke(white);
 
-	randomize(arr, n);
-	int amount = walls_count();
-	walls_position(&hexa, amount, arr);
-	draw_walls(&hexa, amount, hexa.pos);
+	//g_hexa.angle += 5 * CP_System_GetDt();
+
+	move_walls(&g_hexa);
+	move_char(&g_hexa, &g_char);
+
+	draw_line(&g_hexa);
+	draw_walls(&g_hexa);
+	draw_min_walls(&g_hexa);
+	draw_char(&g_hexa, &g_char);
 }
 
 void game_exit(void)
 {
-	//free(pos);
 }
 
 int main(void)
