@@ -34,9 +34,10 @@ void draw_min_walls(struct HEXAGON* hexagon)
 void draw_char(struct HEXAGON* hexagon, struct CHARACTER* character)
 {
 	float multiply = 1.2f;
-	float circle_x = hexagon->center.x + hexagon->min_radius * multiply * cosf(CP_Math_Radians(60 + hexagon->angle + character->move));
+    float circle_x = hexagon->center.x + hexagon->min_radius * multiply * cosf(CP_Math_Radians(60 + hexagon->angle + character->move));
 	float circle_y = hexagon->center.y - hexagon->min_radius * multiply * sinf(CP_Math_Radians(60 + hexagon->angle + character->move));
 	CP_Graphics_DrawCircle(circle_x, circle_y, 15);
+
 }
 
 void draw_line(struct HEXAGON* hexagon)
