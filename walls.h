@@ -23,7 +23,7 @@ struct CHARACTER
 int walls_count();
 void walls_position(struct HEXAGON* hexagon, int random_number);
 void make_wall(struct HEXAGON* hexagon, struct CHARACTER* character);
-void check_walls();
+void check_walls(struct HEXAGON* hexagon, struct CHARACTER* character);
 
 
 extern int g_arr[];

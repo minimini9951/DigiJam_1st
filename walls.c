@@ -57,7 +57,19 @@ void make_wall(struct HEXAGON* hexagon, struct CHARACTER* character)
 	}
 }
 
-void check_walls()
+void check_walls(struct HEXAGON* hexagon, struct CHARACTER* character)
 {
-
+	int count = 0;
+	for (int i = 0; i < 6; i++)
+	{
+		if (hexagon->arr[i] == 1)
+		{
+			count++;
+			if (count == 6)
+			{
+				for (int j = 0; j < 6; j++)
+					hexagon->arr[i] = 0;
+			}
+		}
+	}
 }

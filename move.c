@@ -49,6 +49,7 @@ void move_char(struct HEXAGON* hexagon, struct CHARACTER* character)
 			character->pos = 0;
 			character->move = 60.0f * character->count;
 			make_wall(hexagon, character);
+			check_walls(hexagon, character);
 		}
 	}
 	if (character->pos == 1)
@@ -59,6 +60,7 @@ void move_char(struct HEXAGON* hexagon, struct CHARACTER* character)
 			character->pos = 0;
 			character->move = 60.0f * character->count;
 			make_wall(hexagon, character);
+			check_walls(hexagon, character);
 		}
 	}
 }
