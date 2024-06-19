@@ -68,7 +68,7 @@ void check_walls(struct HEXAGON* hexagon, struct CHARACTER* character)
 			if (count == 6)
 			{
 				for (int j = 0; j < 6; j++)
-					hexagon->arr[i] = 0;
+					hexagon->arr[j] = 0;
 			}
 		}
 	}
