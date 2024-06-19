@@ -48,11 +48,10 @@ void game_update(void)
 
 	//FindClosestHexa
 	struct HEXAGON* close_wall = find_closest_hexa(g_wall_hexa, 4);
-
 	move_char(close_wall, &g_char);
 	for (int i = 0; i < 6; i++)
 		move_walls(&g_efhexa[i], 0);
-
+	collision_check(close_wall, &g_char);
 	//DRAW
 	draw_line(&g_wall_hexa[0]);
 	for (int i = 0; i < 4; i++)

@@ -46,6 +46,8 @@ void move_walls(struct HEXAGON* hexagon, int dir)
 
 void move_char(struct HEXAGON* hexagon, struct CHARACTER* character)
 {
+	if (hexagon == NULL)
+		return;
 	//왼쪽이 양수 count 증각시키고
 	if (CP_Input_KeyTriggered(KEY_LEFT))
 	{

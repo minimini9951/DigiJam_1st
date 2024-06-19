@@ -9,6 +9,8 @@
 
 void collision_check(struct HEXAGON* hexagon, struct CHARACTER* character)
 {
+	if (hexagon == NULL)
+		return;
 	//이게 캐릭터의 중점 값
 	float multiply = 1.2f;
 	float circle_x = hexagon->center.x + hexagon->min_radius * multiply * cosf(CP_Math_Radians(60 + hexagon->angle + character->move));
