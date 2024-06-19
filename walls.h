@@ -7,11 +7,9 @@ struct HEXAGON
 	float max_radius;
 	float radius;
 	float angle;
-	int amount;
+	int amount; //not
 	float sec; //À°°¢Çü ½Ã°£ 
-	int arr[6];
-	float circle_x;
-	float circle_y;
+	int arr[6]; //diff
 };
 
 struct CHARACTER
@@ -24,9 +22,10 @@ struct CHARACTER
 
 int walls_count();
 void walls_position(struct HEXAGON* hexagon, int random_number);
+int move_to_angle(float move);
+int get_area_index(int angle);
+int check_empty(struct HEXAGON* hexagon);
 void make_wall(struct HEXAGON* hexagon, struct CHARACTER* character);
 void check_walls(struct HEXAGON* hexagon, struct CHARACTER* character);
-
-
-extern int g_arr[];
-extern int g_n;
+void create_hexa(struct HEXAGON* hexagon, float base, int efornot, int index);
+struct HEXAGON* find_closest_hexa(struct HEXAGON* hexagon, int size);

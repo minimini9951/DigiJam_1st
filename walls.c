@@ -18,7 +18,6 @@ void walls_position(struct HEXAGON* hexagon, int random_number)
 {
 	for (int i = 0; i < random_number; i++)
 	{
-		
 		int n = CP_Random_RangeInt(0, 5); //n에 0~5값의 랜덤 값을 넣고 
 		hexagon->arr[n] = 1; //육각형의 arr에서 0~5의 배열을 1로 반환(0은 없다는 뜻이고 1은 있다는 뜻)
 	}
@@ -49,19 +48,36 @@ int get_area_index(int angle) //
 	}
 }
 
+int check_empty(struct HEXAGON* hexagon)
+{
+	int count = 0;
+	for (int i = 0; i < 6; i++)
+	{
+		if (hexagon->arr[i] == 0)
+		{
+			count++;
+			if (count == 6)
+				return 0;
+		}
+	}
+	return 1;
+}
+
 void make_wall(struct HEXAGON* hexagon, struct CHARACTER* character)
 {
 	int p_angle = move_to_angle(character->move);
 	character->area = get_area_index(p_angle);
-	printf("%d %d %d %d %d %d   %d %f\n", hexagon->arr[0], hexagon->arr[1], hexagon->arr[2], hexagon->arr[3], hexagon->arr[4], hexagon->arr[5], character->area, character->move);
+	int check_null = check_empty(hexagon);
 	for (int i = 0; i < 6; i++)
 	{
-		if (character->area == i && hexagon->arr[i] == 0)
-		hexagon->arr[i] = 1;
+		if (character->area == i && hexagon->arr[i] == 0 && check_null)
+		{
+			hexagon->arr[i] = 1;
+		}
 	}
 }
 
-void check_walls(struct HEXAGON* hexagon, struct CHARACTER* character)
+void check_walls(struct HEXAGON* hexagon, struct CHARACTER* character) // todo
 {
 	int count = 0;
 	for (int i = 0; i < 6; i++)
@@ -71,9 +87,65 @@ void check_walls(struct HEXAGON* hexagon, struct CHARACTER* character)
 			count++;
 			if (count == 6)
 			{
+				// efx alive = 1
 				for (int j = 0; j < 6; j++)
 					hexagon->arr[j] = 0;
 			}
 		}
 	}
+}
+
+void create_hexa(struct HEXAGON* hexagon, float base, int efornot, int index)
+{
+	hexagon->angle = 0;
+	const float d = 100;
+	const float t = 1;
+
+	hexagon->center.x = CP_System_GetDisplayHeight() / 2.0f;
+	hexagon->center.y = CP_System_GetDisplayHeight() / 2.0f;
+
+	if (!efornot)
+	{
+		hexagon->sec = 4 - index * t;
+		hexagon->radius = base + index * d;
+		hexagon->max_radius = base + 3 * d;
+		hexagon->min_radius = base / 5;
+		hexagon->amount = walls_count();
+		walls_position(hexagon, hexagon->amount);
+	}
+	else
+	{
+		hexagon->radius = 0;
+		hexagon->max_radius = 0;
+		hexagon->min_radius = 0;
+	}
+
+
+	for (int j = 0; j < 6; j++)
+	{
+		hexagon->arr[j] = 0;
+	}
+
+}
+
+struct HEXAGON* find_closest_hexa(struct HEXAGON* hexagon, int size)
+{
+	struct HEXAGON* res = NULL;
+	
+	for (int i = 0; i < size; i++)
+	{
+		//Not count empty
+		if (!check_empty(&hexagon[i]))
+			continue;
+
+		if(res == NULL)
+			res = &hexagon[i];
+
+		if (hexagon[i].radius < res->radius)
+		{
+			res = &hexagon[i];
+		}
+	}
+
+	return res;
 }

@@ -43,6 +43,7 @@
       <Filter>Header file</Filter>
     </ClInclude>
     <ClInclude Include="tetrishexagon.h">
+
       <Filter>Header file</Filter>
     </ClInclude>
   </ItemGroup>

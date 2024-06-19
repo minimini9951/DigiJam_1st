@@ -7,52 +7,68 @@
 #include"tetrishexagon.h"
 #include <math.h>
 
-int g_arr[6] = { 0, 1, 2, 3, 4, 5 };
-int g_n = sizeof(g_arr) / sizeof(g_arr[0]); //6이라는 소리
-
-struct HEXAGON g_hexa;
+struct HEXAGON g_wall_hexa[4];
+struct HEXAGON g_efhexa[6];
+struct HEXAGON g_big_efhexa[6];
 struct CHARACTER g_char;
 
 void game_init(void)
 {
 	int display_height = CP_System_GetDisplayHeight();
-	CP_System_SetWindowSize(display_height, display_height);
-	g_hexa.angle = 0;
 	const float k = 1;
-
-	g_hexa.center.x = CP_System_GetDisplayHeight() / 2.0f;
-	g_hexa.center.y = CP_System_GetDisplayHeight() / 2.0f;
-
-	g_hexa.radius = display_height / 2 * k; //디스플레이의 절반
-	g_hexa.max_radius = g_hexa.radius;
-	g_hexa.min_radius = g_hexa.radius / 5;
-
-	for (int i = 0; i < g_n; i++)
+	CP_System_SetWindowSize(display_height, display_height);
+	for (int i = 0; i < 4; i++)
 	{
-		g_hexa.arr[i] = 0;
+		create_hexa(&g_wall_hexa[i], display_height / 2 * k, 0, i);
 	}
-	g_hexa.amount = walls_count();//육각형 amount에 1~5의 랜덤값을 넣는다.
-	walls_position(&g_hexa, g_hexa.amount); // 육각형 g_hexa구조체 그 자체, 육각형 amount 1~5에서 나온 수 만큼 생성하고
-	// 위치는 arr[]의 0~5중 랜덤값을 넣고 1을 반환해 생성 시킨다
+
+	for (int i = 0; i < 6; i++)
+	{
+		create_hexa(&g_efhexa[i], 0, 1, i);
+		create_hexa(&g_big_efhexa[i], 0, 1, i);
+	}
+	//create ehexa
+	//create gbighexa
+
 }
 
 void game_update(void)
 {
 	CP_Color black = CP_Color_Create(0, 0, 0, 255);
 	CP_Color white = CP_Color_Create(255, 255, 255, 255);
+	CP_Color blue = CP_Color_Create(0, 0, 255, 255);
+	CP_Color red = CP_Color_Create(255, 0, 0, 255);
 	CP_Graphics_ClearBackground(black);
 	CP_Settings_Stroke(white);
 
-	//g_hexa.angle += 5 * CP_System_GetDt();
 
-	move_walls(&g_hexa);
-	move_char(&g_hexa, &g_char);
+	//MOVE
+	for (int i = 0; i < 4; i++)
+		move_walls(&g_wall_hexa[i], 1);
 
-	draw_line(&g_hexa);
-	draw_walls(&g_hexa);
-	draw_min_walls(&g_hexa);
-	draw_char(&g_hexa, &g_char);
-	collision_check(&g_hexa, &g_char);
+	//FindClosestHexa
+	struct HEXAGON* close_wall = find_closest_hexa(g_wall_hexa, 4);
+
+	move_char(close_wall, &g_char);
+	for (int i = 0; i < 6; i++)
+		move_walls(&g_efhexa[i], 0);
+
+	//DRAW
+	draw_line(&g_wall_hexa[0]);
+	for (int i = 0; i < 4; i++)
+		draw_walls(&g_wall_hexa[i]);
+
+	draw_min_walls(&g_wall_hexa[0]);
+	draw_char(&g_wall_hexa[0], &g_char);
+
+	for (int i = 0; i < 6; i++)
+	{
+		CP_Settings_Stroke(blue);
+		draw_walls(&g_efhexa[i]);
+
+		CP_Settings_Stroke(red);
+		draw_walls(&g_big_efhexa[i]);
+	}
 }
 
 void game_exit(void)

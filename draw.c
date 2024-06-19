@@ -4,7 +4,7 @@
 
 void draw_walls(struct HEXAGON* hexagon)
 {
-	for (int i = 0; i < g_n; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		if (hexagon->arr[i] == 1)
 		{
@@ -20,7 +20,7 @@ void draw_walls(struct HEXAGON* hexagon)
 
 void draw_min_walls(struct HEXAGON* hexagon)
 {
-	for (int i = 0; i < g_n; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		float x1 = hexagon->center.x + hexagon->min_radius * cosf(CP_Math_Radians(30 + hexagon->angle + 60 * i));
 		float y1 = hexagon->center.y - hexagon->min_radius * sinf(CP_Math_Radians(30 + hexagon->angle + 60 * i ));

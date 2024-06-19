@@ -2,19 +2,21 @@
 #include "move.h"
 #include "walls.h"
 #include "utils.h"
+#include "draw.h"
 
-
-void move_walls(struct HEXAGON* hexagon)
+void move_walls(struct HEXAGON* hexagon, int dir)
 {
-	const float total_sec = 5.0f; //벽이 작은 육각형에 가는 시간
-	float frame = CP_System_GetDt();//마지막 프레임에서 경과된 시간(초)을 반환합니다
+	const float total_sec = 8.0f; //벽이 작은 육각형에 가는 시간
+	float frame = CP_System_GetDt(); //마지막 프레임에서 경과된 시간(초)을 반환합니다
+	
+	hexagon->angle += 15 * CP_System_GetDt();
+
 	//Reset hexa
 	if (hexagon->sec >= total_sec)//육각형의 sec이 5보다 크거나 같으면
 	{
 		hexagon->sec = 0;//다시 0으로 초기화
 		//random walls
-		randomize(g_arr, g_n); //외부변수를 받고 0~5에서 랜덤값을 받고 배열 arr[5]와 arr[랜덤값]을 교환 
-		hexagon->amount = walls_count();//육각형 amount에 랜덤 1~5값중 하나 저장
+		hexagon->amount = walls_count();
 		//reset the hex arr
 		for (int i = 0; i < 6; i++)
 			hexagon->arr[i] = 0;
@@ -23,15 +25,18 @@ void move_walls(struct HEXAGON* hexagon)
 	}
 	else
 	{
-		hexagon->sec += frame;//마지막 프레임에서 경과된 시간(초)를 계속 더한다 즉 1초 더한다?
-		float v = CP_Math_ClampFloat(hexagon->sec / total_sec, 0, 1);//frame하나가 0.016초를 그래도 반환하기 위해서
+		hexagon->sec += frame; //마지막 프레임에서 경과된 시간(초)를 계속 더한다 즉 1초 더한다?
+		float v = CP_Math_ClampFloat(hexagon->sec / total_sec, 0, 1); //frame하나가 0.016초를 그래도 반환하기 위해서
 		/* 
 		부동 소수점을 범위로 고정하고 고정된 값을 반환합니다. 
 		제공된 부동 소수점 값이 제공된 최소값보다 작으면 최소값이 반환됩니다. 
 		제공된 부동 소수점 값이 제공된 최대 값보다 크면 최대 값이 반환됩니다. 
 		그렇지 않으면 제공된 부동 소수점 값이 반환됩니다.
 		*/
-		hexagon->radius = lerp(hexagon->max_radius, hexagon->min_radius, v);
+		if(dir)
+			hexagon->radius = lerp(hexagon->max_radius, hexagon->min_radius, v);
+		else
+			hexagon->radius = lerp(hexagon->min_radius, hexagon->max_radius, v);
 		//max_radius,min_radius의 v는 비율을 나타낸다. 
 		//즉 5초동안 작은 육각형으로 가까워 지게 하는 식이다.
 	}
@@ -76,6 +81,7 @@ void move_char(struct HEXAGON* hexagon, struct CHARACTER* character)
 			character->move = 60.0f * character->count;
 			make_wall(hexagon, character);
 			check_walls(hexagon, character);
+			//move_efwalls(efhexa);
 		}
 	}
 }
