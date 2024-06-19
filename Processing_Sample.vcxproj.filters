@@ -42,5 +42,8 @@
     <ClInclude Include="draw.h">
       <Filter>Header file</Filter>
     </ClInclude>
+    <ClInclude Include="copy.h">
+      <Filter>Header file</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
