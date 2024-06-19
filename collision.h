@@ -3,4 +3,4 @@
 struct HEXAGON;
 struct CHARACTER;
 
-void collision_check();
+void collision_check(struct HEXAGON* hexagon, struct CHARACTER* character);

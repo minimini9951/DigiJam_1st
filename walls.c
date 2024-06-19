@@ -5,9 +5,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+
+//벽 카운트 
 int walls_count()
 {
-	int random_number = CP_Random_RangeInt(1, 5);
+	int random_number = CP_Random_RangeInt(1, 5); //주어진 두 값과 같거나 그 사이에 있는 임의의 부동 소수점을 반환합니다.
+	//random_number 1~5값을 반환해준다
 	return random_number;
 }
 
@@ -15,8 +18,9 @@ void walls_position(struct HEXAGON* hexagon, int random_number)
 {
 	for (int i = 0; i < random_number; i++)
 	{
-		int n = CP_Random_RangeInt(0, 5);
-		hexagon->arr[n] = 1;
+		
+		int n = CP_Random_RangeInt(0, 5); //n에 0~5값의 랜덤 값을 넣고 
+		hexagon->arr[n] = 1; //육각형의 arr에서 0~5의 배열을 1로 반환(0은 없다는 뜻이고 1은 있다는 뜻)
 	}
 }
 
@@ -25,16 +29,16 @@ int move_to_angle(float move)
 	if (move >= 0)
 	{
 		int m = (int)move / 360;
-		return (int)move - 360 * m;
+		return (int)move - 360 * m; //정방향
 	}
 	else
 	{
-		int m = -1 * (int)move / 360 + 1;
+		int m = -1 * (int)move / 360 + 1;//반대 방향
 		return 360 * m + (int)move;
 	}
 }
 
-int get_area_index(int angle)
+int get_area_index(int angle) //
 {
 	if (angle > 330 || angle < 30)
 		return 0;
@@ -68,7 +72,7 @@ void check_walls(struct HEXAGON* hexagon, struct CHARACTER* character)
 			if (count == 6)
 			{
 				for (int j = 0; j < 6; j++)
-					hexagon->arr[i] = 0;
+					hexagon->arr[j] = 0;
 			}
 		}
 	}

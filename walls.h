@@ -8,8 +8,10 @@ struct HEXAGON
 	float radius;
 	float angle;
 	int amount;
-	float sec;
+	float sec; //À°°¢Çü ½Ã°£ 
 	int arr[6];
+	float circle_x;
+	float circle_y;
 };
 
 struct CHARACTER
