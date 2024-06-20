@@ -9,7 +9,7 @@ void move_walls(struct HEXAGON* hexagon, int dir, float total_sec)
 	//벽이 작은 육각형에 가는 시간
 	float frame = CP_System_GetDt(); //마지막 프레임에서 경과된 시간(초)을 반환합니다
 	
-	hexagon->angle += 15 * CP_System_GetDt();
+	//hexagon->angle += 15 * CP_System_GetDt();
 
 	//Reset hexa
 	if (hexagon->sec >= total_sec)//육각형의 sec이 5보다 크거나 같으면
@@ -44,7 +44,7 @@ void move_walls(struct HEXAGON* hexagon, int dir, float total_sec)
 		if(dir)
 			hexagon->radius = lerp(hexagon->max_radius, hexagon->min_radius, v);
 		else
-			hexagon->radius = lerp(hexagon->min_radius, hexagon->max_radius, v);
+			hexagon->radius = lerp(hexagon->min_radius, hexagon->max_radius * 2, v);
 		//max_radius,min_radius의 v는 비율을 나타낸다. 
 		//즉 5초동안 작은 육각형으로 가까워 지게 하는 식이다.
 	}
@@ -81,8 +81,9 @@ void move_char(struct HEXAGON* hexagon, struct CHARACTER* character)
 
 			int p_angle = move_to_angle(character->move);
 			character->area = get_area_index(p_angle);
-
-			make_effect(character->area);
+			struct HEXAGON* close_wall = find_closest_hexa(g_wall_hexa, WallNumber);
+			if (close_wall->arr[character->area] == 0)
+				make_effect(character->area);
 		}
 	}
 	if (character->pos == 1)
@@ -96,7 +97,9 @@ void move_char(struct HEXAGON* hexagon, struct CHARACTER* character)
 			int p_angle = move_to_angle(character->move);
 			character->area = get_area_index(p_angle);
 
-			make_effect(character->area);
+			struct HEXAGON* close_wall = find_closest_hexa(g_wall_hexa, WallNumber);
+			if (close_wall->arr[character->area] == 0)
+				make_effect(character->area);
 		}
 	}
 }

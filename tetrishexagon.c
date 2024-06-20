@@ -66,27 +66,27 @@ void game_update(void)
 		struct HEXAGON* close_wall = find_closest_hexa(g_wall_hexa, WallNumber);
 		move_char(close_wall, &g_char);
 		for (int i = 0; i < WallNumber; i++)
-			move_walls(&g_wall_hexa[i], 1, 4);
+			move_walls(&g_wall_hexa[i], 1, 10);
 
 		for (int i = 0; i < 6; i++)
 		{
-			move_walls(&g_efhexa[i], 0, 2);
+			move_walls(&g_efhexa[i], 0, 4);
 			move_walls(&g_big_efhexa[i], 0, 1);
 			change_eftowall(&g_wall_hexa[0], WallNumber, &g_efhexa[i]);
 
 		}
 		//Check if player collided //선수를 죽이다
-		if (collision_check(close_wall, &g_char) == 1)
-		{
-			//End Game Code
-			g_char.Alive = 0;//Die
-		}
+		//if (collision_check(close_wall, &g_char) == 1)
+		//{
+		//	//End Game Code
+		//	g_char.Alive = 0;//Die
+		//}
 	}
 
 	//DRAW
 	draw_line(&g_wall_hexa[0]);
 	for (int i = 0; i < WallNumber; i++)
-		draw_walls(&g_wall_hexa[i]);
+		draw_walls(&g_wall_hexa[i], 0);
 
 	draw_min_walls(&g_wall_hexa[0]);
 	draw_char(&g_wall_hexa[0], &g_char);
@@ -94,11 +94,11 @@ void game_update(void)
 	for (int i = 0; i < 6; i++)
 	{
 		CP_Settings_Stroke(blue);
-		draw_walls(&g_efhexa[i]);
+		draw_walls(&g_efhexa[i], 1);
 
 		CP_Color col = CP_Color_Lerp(red, blue, g_big_efhexa[i].sec / 0.5f);
 		CP_Settings_Stroke(col);
-		draw_walls(&g_big_efhexa[i]);
+		draw_walls(&g_big_efhexa[i], 1);
 	}
 
 
@@ -122,14 +122,3 @@ void game_update(void)
 void game_exit(void)
 {
 }
-
-
-/*
-int main(void)
-{
-	CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
-	//CP_Engine_SetNextGameState(game_init, game_update, game_exit);
-	CP_Engine_Run();
-	return 0;
-}
-*/

@@ -2,7 +2,7 @@
 #include "walls.h"
 #include <math.h>
 
-void draw_walls(struct HEXAGON* hexagon)
+void draw_walls(struct HEXAGON* hexagon, int isefwall)
 {
 	for (int i = 0; i < 6; i++)
 	{
@@ -12,7 +12,25 @@ void draw_walls(struct HEXAGON* hexagon)
 			float y1 = hexagon->center.y - hexagon->radius * sinf(CP_Math_Radians(30 + hexagon->angle + 60 * i));
 			float x2 = hexagon->center.x + hexagon->radius * cosf(CP_Math_Radians(30 + hexagon->angle + 60 * (i + 1)));
 			float y2 = hexagon->center.y - hexagon->radius * sinf(CP_Math_Radians(30 + hexagon->angle + 60 * (i + 1)));
-
+			if(isefwall)
+				CP_Settings_Stroke(CP_Color_Create(0, 0, 255, 255));
+			else
+				CP_Settings_Stroke(CP_Color_Create(255, 255, 255, 255));
+			CP_Graphics_DrawLine(x1, y1, x2, y2);
+		}
+		else if (hexagon->arr[i] == 0)
+		{
+			float x1 = hexagon->center.x + hexagon->radius * cosf(CP_Math_Radians(30 + hexagon->angle + 60 * i));
+			float y1 = hexagon->center.y - hexagon->radius * sinf(CP_Math_Radians(30 + hexagon->angle + 60 * i));
+			float x2 = hexagon->center.x + hexagon->radius * cosf(CP_Math_Radians(30 + hexagon->angle + 60 * (i + 1)));
+			float y2 = hexagon->center.y - hexagon->radius * sinf(CP_Math_Radians(30 + hexagon->angle + 60 * (i + 1)));
+			if (isefwall)
+				CP_Settings_Stroke(CP_Color_Create(0, 255, 0, 100));
+			else
+			{
+				CP_Color red = CP_Color_Create(255, 0, 0, 100);
+				CP_Settings_Stroke(red);
+			}
 			CP_Graphics_DrawLine(x1, y1, x2, y2);
 		}
 	}

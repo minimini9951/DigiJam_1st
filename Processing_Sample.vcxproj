@@ -208,7 +208,6 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="collision.h" />
-    <ClInclude Include="copy.h" />
     <ClInclude Include="draw.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="move.h" />

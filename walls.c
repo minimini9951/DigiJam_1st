@@ -175,8 +175,12 @@ void make_effect(int area)
 
 	empty_hexa->radius = g_wall_hexa[0].min_radius * 1.5f;
 	empty_hexa->min_radius = g_wall_hexa[0].min_radius * 1.5f;
-	empty_hexa->max_radius = g_wall_hexa[0].max_radius;
+	empty_hexa->max_radius = g_wall_hexa[0].max_radius * 1.5f;
 
+	for (int i = 0; i < 6; i++)
+	{
+		empty_hexa->arr[i] = 0;
+	}
 	empty_hexa->arr[area] = 1;
 	empty_hexa->sec = 0;
 }
