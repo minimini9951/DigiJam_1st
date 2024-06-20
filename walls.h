@@ -18,7 +18,8 @@ struct CHARACTER
 	int count;
 	float move;
 	int area;
-	int Alive;
+	int Alive;//살아있는 판정
+	float Time;
 };
 
 int walls_count();

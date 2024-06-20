@@ -7,6 +7,7 @@
 #include"tetrishexagon.h"
 #include "MainMenu.h"
 #include <math.h>
+#include <stdio.h>
 
 struct HEXAGON g_wall_hexa[WallNumber];
 struct HEXAGON g_efhexa[6];
@@ -42,7 +43,7 @@ void game_init(void)
 		create_hexa(&g_big_efhexa[i], 0, 1, i);
 	}
 	g_char.Alive = 1;//MEAN LIVE
-
+	g_char.Time = 0; //ALive Time
 	//create ehexa
 	//create gbighexa
 }
@@ -59,10 +60,12 @@ void game_update(void)
 	CP_Settings_TextAlignment(Horizontal, Vertical);
 	CP_Settings_TextSize(160);
 
-
 	//MOVE
 	//FindClosestHexa
 	if (g_char.Alive == 1) {
+
+		g_char.Time +=CP_System_GetDt();//시간을 계속 저장하는 함수
+				
 		struct HEXAGON* close_wall = find_closest_hexa(g_wall_hexa, WallNumber);
 		move_char(close_wall, &g_char);
 		for (int i = 0; i < WallNumber; i++)
@@ -109,12 +112,40 @@ void game_update(void)
 		CP_Font_DrawText("Game", 540, 40);
 		CP_Font_DrawText("Over", 540, 195);
 		//Game Play Time 
+		CP_Settings_TextSize(100);
+		char buffer[16] = { 0 };
+		CP_Settings_Fill(red);
+		sprintf_s(buffer, 16, "%.2f", g_char.Time);
+		CP_Font_DrawText("Alive Time:", 380, 400);
+		CP_Font_DrawText(buffer, 720, 400);
+
 
 		//Game Restart Button
 		CP_Settings_TextSize(80);
 		DrawRect_GameOver(blue, 390, 650, 300, 100);
 		CP_Settings_Fill(white);
 		CP_Font_DrawText("ReStart", 540, 690);
+
+		CP_Settings_TextSize(70);
+		DrawRect_GameOver(blue, 390, 800, 300, 100);
+		CP_Settings_Fill(white);
+		CP_Font_DrawText("MainMenu", 540, 850);
+
+		if (CP_Input_MouseClicked()) 
+		{
+			if (CP_Input_GetMouseX() > 390 && CP_Input_GetMouseX() < 690 && CP_Input_GetMouseY() > 650 && CP_Input_GetMouseX() < 750) 
+			{
+				g_char.Alive = 1;
+				CP_Engine_SetNextGameStateForced(game_init, game_update, game_exit);
+			}
+
+			if (CP_Input_GetMouseX() > 390 && CP_Input_GetMouseX() < 690 && CP_Input_GetMouseY() > 800 && CP_Input_GetMouseX() < 900) 
+			{
+				CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
+			}
+
+
+		}
 
 	}
 }
