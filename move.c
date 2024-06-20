@@ -4,9 +4,9 @@
 #include "utils.h"
 #include "draw.h"
 
-void move_walls(struct HEXAGON* hexagon, int dir)
+void move_walls(struct HEXAGON* hexagon, int dir, float total_sec)
 {
-	const float total_sec = 8.0f; //벽이 작은 육각형에 가는 시간
+	//벽이 작은 육각형에 가는 시간
 	float frame = CP_System_GetDt(); //마지막 프레임에서 경과된 시간(초)을 반환합니다
 	
 	hexagon->angle += 15 * CP_System_GetDt();
@@ -15,13 +15,21 @@ void move_walls(struct HEXAGON* hexagon, int dir)
 	if (hexagon->sec >= total_sec)//육각형의 sec이 5보다 크거나 같으면
 	{
 		hexagon->sec = 0;//다시 0으로 초기화
-		//random walls
-		hexagon->amount = walls_count();
-		//reset the hex arr
-		for (int i = 0; i < 6; i++)
-			hexagon->arr[i] = 0;
 
-		walls_position(hexagon, hexagon->amount); //육각형 arr[랜덤값]의 위치에 1을 넣음(육각형이 그 배열에 있다는 거임)
+		if (dir)
+		{
+			//random walls
+			hexagon->amount = walls_count();
+			//reset the hex arr
+			for (int i = 0; i < 6; i++)
+				hexagon->arr[i] = 0;
+
+			walls_position(hexagon, hexagon->amount); //육각형 arr[랜덤값]의 위치에 1을 넣음(육각형이 그 배열에 있다는 거임)
+		}
+		else
+		{
+			set_empty(hexagon);
+		}
 	}
 	else
 	{
@@ -70,8 +78,11 @@ void move_char(struct HEXAGON* hexagon, struct CHARACTER* character)
 		{
 			character->pos = 0;
 			character->move = 60.0f * character->count;
-			make_wall(hexagon, character);
-			check_walls(hexagon, character);
+
+			int p_angle = move_to_angle(character->move);
+			character->area = get_area_index(p_angle);
+
+			make_effect(character->area);
 		}
 	}
 	if (character->pos == 1)
@@ -81,9 +92,11 @@ void move_char(struct HEXAGON* hexagon, struct CHARACTER* character)
 		{
 			character->pos = 0;
 			character->move = 60.0f * character->count;
-			make_wall(hexagon, character);
-			check_walls(hexagon, character);
-			//move_efwalls(efhexa);
+
+			int p_angle = move_to_angle(character->move);
+			character->area = get_area_index(p_angle);
+
+			make_effect(character->area);
 		}
 	}
 }
