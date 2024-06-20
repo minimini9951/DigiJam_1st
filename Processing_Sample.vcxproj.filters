@@ -17,6 +17,9 @@
     <ClCompile Include="draw.c">
       <Filter>Source file</Filter>
     </ClCompile>
+    <ClCompile Include="MainMenu.c">
+      <Filter>Source file</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header file">
@@ -43,7 +46,10 @@
       <Filter>Header file</Filter>
     </ClInclude>
     <ClInclude Include="tetrishexagon.h">
-
+      <Filter>Header file</Filter>
+    </ClInclude>
+    <ClInclude Include="copy.h" />
+    <ClInclude Include="MainMenu.h">
       <Filter>Header file</Filter>
     </ClInclude>
   </ItemGroup>

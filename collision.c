@@ -7,10 +7,10 @@
 #include <math.h>
 #include"tetrishexagon.h"
 
-void collision_check(struct HEXAGON* hexagon, struct CHARACTER* character)
+int collision_check(struct HEXAGON* hexagon, struct CHARACTER* character)
 {
 	if (hexagon == NULL)
-		return;
+		return 0;
 	//이게 캐릭터의 중점 값
 	float multiply = 1.2f;
 	float circle_x = hexagon->center.x + hexagon->min_radius * multiply * cosf(CP_Math_Radians(60 + hexagon->angle + character->move));
@@ -31,15 +31,14 @@ void collision_check(struct HEXAGON* hexagon, struct CHARACTER* character)
 			middleX = (x1 + x2) / 2;
 			middleY = (y1 + y2) / 2;
 
+			//충돌하면 값을 1를 반환
 			if (pow((middleX-circle_x), 2) + pow((middleY-circle_y), 2)-(pow(7.5f,2))<=0)
 			{
-				//이 부분에서 화면 멈추는 기능 구현
-				CP_Engine_Terminate();
-
+				return 1;
 			}
+			
 		}
 	}
-
-
-		
+	 //충돌 안했으면 0을 반환
+	return 0;	
 }

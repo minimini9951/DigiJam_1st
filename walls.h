@@ -18,6 +18,7 @@ struct CHARACTER
 	int count;
 	float move;
 	int area;
+	int Alive;
 };
 
 int walls_count();
