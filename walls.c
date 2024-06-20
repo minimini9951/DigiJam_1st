@@ -63,21 +63,19 @@ int check_empty(struct HEXAGON* hexagon)
 	return 1;
 }
 
-void make_wall(struct HEXAGON* hexagon, struct CHARACTER* character)
+void make_wall(struct HEXAGON* hexagon, int area)
 {
-	int p_angle = move_to_angle(character->move);
-	character->area = get_area_index(p_angle);
 	int check_null = check_empty(hexagon);
 	for (int i = 0; i < 6; i++)
 	{
-		if (character->area == i && hexagon->arr[i] == 0 && check_null)
+		if (area == i && hexagon->arr[i] == 0 && check_null)
 		{
 			hexagon->arr[i] = 1;
 		}
 	}
 }
 
-void check_walls(struct HEXAGON* hexagon, struct CHARACTER* character) // todo
+void check_walls(struct HEXAGON* hexagon) // todo
 {
 	int count = 0;
 	for (int i = 0; i < 6; i++)
@@ -88,10 +86,22 @@ void check_walls(struct HEXAGON* hexagon, struct CHARACTER* character) // todo
 			if (count == 6)
 			{
 				// efx alive = 1
-				for (int j = 0; j < 6; j++)
-					hexagon->arr[j] = 0;
+
+				struct HEXAGON* empty_hexa = find_empty_hexa(g_big_efhexa, 6);
+				if (empty_hexa != NULL)
+					change_bigeftowall(&g_wall_hexa[0], WallNumber, empty_hexa);
+
+				set_empty(hexagon);
 			}
 		}
+	}
+}
+
+void set_empty(struct HEXAGON* hexagon)
+{
+	for (int i = 0; i < 6; i++)
+	{
+		hexagon->arr[i] = 0;
 	}
 }
 
@@ -106,7 +116,7 @@ void create_hexa(struct HEXAGON* hexagon, float base, int efornot, int index)
 
 	if (!efornot)
 	{
-		hexagon->sec = 4 - index * t;
+		hexagon->sec = WallNumber - index * t;
 		hexagon->radius = base + index * d;
 		hexagon->max_radius = base + 3 * d;
 		hexagon->min_radius = base / 5;
@@ -120,12 +130,7 @@ void create_hexa(struct HEXAGON* hexagon, float base, int efornot, int index)
 		hexagon->min_radius = 0;
 	}
 
-
-	for (int j = 0; j < 6; j++)
-	{
-		hexagon->arr[j] = 0;
-	}
-
+	set_empty(hexagon);
 }
 
 struct HEXAGON* find_closest_hexa(struct HEXAGON* hexagon, int size)
@@ -148,4 +153,73 @@ struct HEXAGON* find_closest_hexa(struct HEXAGON* hexagon, int size)
 	}
 
 	return res;
+}
+
+struct HEXAGON* find_empty_hexa(struct HEXAGON* hexagon, int size)
+{
+	for (int i = 0; i < size; i++)
+	{
+		if (!check_empty(&hexagon[i]))
+			return &hexagon[i];
+	}
+
+	return NULL;
+}
+
+
+void make_effect(int area)
+{
+	struct HEXAGON* empty_hexa = find_empty_hexa(g_efhexa, 6);
+	if (empty_hexa == NULL)
+		return;
+
+	empty_hexa->radius = g_wall_hexa[0].min_radius * 1.5f;
+	empty_hexa->min_radius = g_wall_hexa[0].min_radius * 1.5f;
+	empty_hexa->max_radius = g_wall_hexa[0].max_radius;
+
+	empty_hexa->arr[area] = 1;
+	empty_hexa->sec = 0;
+}
+
+void change_eftowall(struct HEXAGON* hexagon_arr, int size, struct HEXAGON* hexagon)
+{
+	//get closest
+	struct HEXAGON* closest_hexa = find_closest_hexa(hexagon_arr, size);
+
+	if (closest_hexa == NULL)
+		return;
+
+	//check if we arrived to it
+	if (closest_hexa->radius <= hexagon->radius)
+	{
+		//for each 1 in the hex arr, create wall
+		//set a wall
+		for (int i = 0; i < 6; i++)
+		{
+			if (hexagon->arr[i] == 1)
+			{
+				make_wall(closest_hexa, i);
+				check_walls(closest_hexa);
+			}
+		}
+		//reset the effect to empty
+		set_empty(hexagon);
+	}
+}
+
+void change_bigeftowall(struct HEXAGON* hexagon_arr, int size, struct HEXAGON* hexagon)
+{
+	struct HEXAGON* closest_hexa = find_closest_hexa(hexagon_arr, size);
+
+	if (closest_hexa == NULL)
+		return;
+
+	hexagon->radius = closest_hexa->radius;
+	hexagon->min_radius = closest_hexa->radius;
+	hexagon->max_radius = closest_hexa->radius;
+
+	for (int i = 0; i < 6; i++)
+	{
+		hexagon->arr[i] = 1;
+	}
 }

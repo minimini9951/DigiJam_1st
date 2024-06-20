@@ -8,7 +8,7 @@
 #include "MainMenu.h"
 #include <math.h>
 
-struct HEXAGON g_wall_hexa[4];
+struct HEXAGON g_wall_hexa[WallNumber];
 struct HEXAGON g_efhexa[6];
 struct HEXAGON g_big_efhexa[6];
 struct CHARACTER g_char;
@@ -31,7 +31,7 @@ void game_init(void)
 	int display_height = CP_System_GetDisplayHeight();
 	const float k = 1;
 	CP_System_SetWindowSize(display_height, display_height);
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < WallNumber; i++)
 	{
 		create_hexa(&g_wall_hexa[i], display_height / 2 * k, 0, i);
 	}
@@ -61,21 +61,20 @@ void game_update(void)
 
 
 	//MOVE
-	//플레이어가 살아있는 경우에만 이동
-	//플레이어가 살아있는지 죽었는지 확인할려고 Alive 변수로 확인
-	//Move 자체가 멈추는 기능(g_char가 살아있으면 1, 죽으면 0)
-	//살아있는 판정은 collision_check로 반환해서 값을 암
+	//FindClosestHexa
 	if (g_char.Alive == 1) {
-		for (int i = 0; i < 4; i++)
-			move_walls(&g_wall_hexa[i], 1);
-
-		//FindClosestHexa
-		struct HEXAGON* close_wall = find_closest_hexa(g_wall_hexa, 4);
+		struct HEXAGON* close_wall = find_closest_hexa(g_wall_hexa, WallNumber);
 		move_char(close_wall, &g_char);
+		for (int i = 0; i < WallNumber; i++)
+			move_walls(&g_wall_hexa[i], 1, 4);
+
 		for (int i = 0; i < 6; i++)
-			move_walls(&g_efhexa[i], 0);
+		{
+			move_walls(&g_efhexa[i], 0, 2);
+			move_walls(&g_big_efhexa[i], 0, 1);
+			change_eftowall(&g_wall_hexa[0], WallNumber, &g_efhexa[i]);
 
-
+		}
 		//Check if player collided //선수를 죽이다
 		if (collision_check(close_wall, &g_char) == 1)
 		{
@@ -86,7 +85,7 @@ void game_update(void)
 
 	//DRAW
 	draw_line(&g_wall_hexa[0]);
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < WallNumber; i++)
 		draw_walls(&g_wall_hexa[i]);
 
 	draw_min_walls(&g_wall_hexa[0]);
@@ -97,8 +96,9 @@ void game_update(void)
 		CP_Settings_Stroke(blue);
 		draw_walls(&g_efhexa[i]);
 
-		CP_Settings_Stroke(red);
-		draw_walls(&g_big_efhexa[i]);	
+		CP_Color col = CP_Color_Lerp(red, blue, g_big_efhexa[i].sec / 0.5f);
+		CP_Settings_Stroke(col);
+		draw_walls(&g_big_efhexa[i]);
 	}
 
 
