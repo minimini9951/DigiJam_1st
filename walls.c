@@ -143,10 +143,10 @@ struct HEXAGON* find_closest_hexa(struct HEXAGON* hexagon, int size)
 
 		if (res == NULL)
 		{
-			if(hexagon[i].radius > hexagon[i].min_radius * 1.5f)
+			if(hexagon[i].radius > hexagon[i].min_radius * 1.25f)
 				res = &hexagon[i];
 		}
-		else if (hexagon[i].radius < res->radius && hexagon[i].radius > hexagon[i].min_radius * 1.5f) //radius has to be > player
+		else if (hexagon[i].radius < res->radius && hexagon[i].radius > hexagon[i].min_radius * 1.25f) //radius has to be > player
 		{
 			res = &hexagon[i];
 		}

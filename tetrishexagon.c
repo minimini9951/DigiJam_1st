@@ -90,6 +90,7 @@ void game_update(void)
 		}
 		//Check if player collided //선수를 죽이다
 		struct HEXAGON* close_wall = find_closest_hexa(g_wall_hexa, WallNumber);
+
 		if (close_wall != NULL)
 		{
 			if (collision_check(close_wall, &g_char) == 1)
