@@ -4,12 +4,31 @@
 #include "utils.h"
 #include "draw.h"
 
+void rotate_wall(struct HEXAGON* hexagon, struct RANDOMANGLE* angle)
+{
+	if (angle->rotation_Time >= 10) // 18초 경과시
+	{
+		// 10초당 한번만 실행
+		if (CP_Random_RangeInt(0, 1))
+			angle->random_angle = (float)CP_Random_RangeInt(45, 75);
+		else
+			angle->random_angle = -1 * (float)CP_Random_RangeInt(45, 75);
+
+		angle->rotation_Time = 0;
+	}
+	else
+	{
+		// 0 
+		angle->rotation_Time += CP_System_GetDt();
+		for(int i = 0; i < 6; i++)
+			hexagon[i].angle += angle->random_angle * CP_System_GetDt();
+	}
+}
+
 void move_walls(struct HEXAGON* hexagon, int dir, float total_sec)
 {
 	//벽이 작은 육각형에 가는 시간
 	float frame = CP_System_GetDt(); //마지막 프레임에서 경과된 시간(초)을 반환합니다
-	
-	hexagon->angle += 15 * CP_System_GetDt();
 
 	//Reset hexa
 	if (hexagon->sec >= total_sec)//육각형의 sec이 5보다 크거나 같으면
@@ -58,13 +77,17 @@ void move_char(struct CHARACTER* character)
 	if (CP_Input_KeyTriggered(KEY_LEFT))
 	{
 		character->pos = 1;
+		character->copyCounter = character->count;
 		character->count++;
+		confused(character);
 	}
 	//오른쪽은 음수 count 감소 시킴
 	if (CP_Input_KeyTriggered(KEY_RIGHT))
 	{
 		character->pos = -1;
+		character->copyCounter = character->count;
 		character->count--;
+		confused(character);
 	}
 
 	//왼쪽 키는 -1
@@ -108,4 +131,51 @@ void move_char(struct CHARACTER* character)
 				make_effect(character->area);
 		}
 	}
+}
+
+void confused(struct CHARACTER* character)
+{
+	// If player moves 6 time same direction, player's character is be confused
+
+	if (character->confusedCounters_arr[character->confusedCounter] == 0)
+		character->confusedCounters_arr[character->confusedCounter] = character->copyCounter;
+
+	for(int i = character->confusedCounter; i < 6; i++)
+		if (character->confusedCounters_arr[i] != 0)
+		{
+			character->confusedCounter++;
+			if (character->confusedCounter == 6)
+			{
+				for (int j = 0; j < 5; j++)
+				{
+					if (character->confusedCounters_arr[j + 1] == character->confusedCounters_arr[j] + 1)
+					{
+						character->still_confused++;
+						if (character->still_confused == 5)
+						{
+							character->confused = 1;
+						}
+						else
+						{
+							character->confused = 0;
+						}
+					}
+					if (character->confusedCounters_arr[j + 1] == character->confusedCounters_arr[j] - 1)
+					{
+						character->still_confused--;
+						if (character->still_confused == -5)
+						{
+							character->confused = 1;
+						}
+						else
+						{
+							character->confused = 0;
+						}
+					}
+
+				}
+			}
+		}
+	// In confused condition, 50% move reverse position
+	// If move 3 times in confused, exit confused.
 }

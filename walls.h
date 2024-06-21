@@ -19,7 +19,19 @@ struct CHARACTER
 	float move;
 	int area;
 	int Alive;//살아있는 판정
-	float Time;
+	float total_Time;
+	int copyCounter;
+	int confusedCounter;
+	int still_confused;
+	int confusedCounters_arr[6];
+	int confused; // 0, 1
+	int breakConfuse;
+};
+
+struct RANDOMANGLE
+{
+	float rotation_Time;
+	float random_angle;
 };
 
 enum wall_type
@@ -49,3 +61,5 @@ void change_bigeftowall(struct HEXAGON* hexagon_arr, int size, struct HEXAGON* h
 extern struct HEXAGON g_wall_hexa[WallNumber];
 extern struct HEXAGON g_efhexa[6];
 extern struct HEXAGON g_big_efhexa[6];
+extern struct CHARACTER g_char;
+extern struct RANDOMANGLE g_angle;

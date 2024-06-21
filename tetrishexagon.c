@@ -13,6 +13,7 @@ struct HEXAGON g_wall_hexa[WallNumber];
 struct HEXAGON g_efhexa[6];
 struct HEXAGON g_big_efhexa[6];
 struct CHARACTER g_char;
+struct RANDOMANGLE g_angle;
 
 CP_Font myFont;
 CP_TEXT_ALIGN_HORIZONTAL Horizontal = CP_TEXT_ALIGN_H_CENTER;
@@ -32,6 +33,7 @@ void game_init(void)
 	int display_height = CP_System_GetDisplayHeight();
 	const float k = 1;
 	CP_System_SetWindowSize(display_height, display_height);
+	g_angle.random_angle = 60;
 	for (int i = 0; i < WallNumber; i++)
 	{
 		create_hexa(&g_wall_hexa[i], display_height / 2 * k, 0, i);
@@ -43,7 +45,15 @@ void game_init(void)
 		create_hexa(&g_big_efhexa[i], 0, 1, i);
 	}
 	g_char.Alive = 1;//MEAN LIVE
-	g_char.Time = 0; //ALive Time
+	g_char.total_Time = 0; //ALive Time
+
+	g_char.copyCounter = 0;
+	for(int i = 0; i < 6; i++)
+		g_char.confusedCounters_arr[i] = 0;
+	g_char.confused = 0;
+	g_char.breakConfuse = 0;
+
+	g_angle.rotation_Time = -6.0f; //-6은 처음대기시간. 변수로 바꿀것
 	//create ehexa
 	//create gbighexa
 }
@@ -68,11 +78,15 @@ void game_update(void)
 	//FindClosestHexa
 	if (g_char.Alive == 1) {
 
-		g_char.Time += CP_System_GetDt();//시간을 계속 저장하는 함수
+		g_char.total_Time += CP_System_GetDt();//시간을 계속 저장하는 함수
+
+		rotate_wall(g_wall_hexa, &g_angle);
+		rotate_wall(g_efhexa, &g_angle);
+		rotate_wall(g_big_efhexa, &g_angle);
 
 		move_char(&g_char);
 		for (int i = 0; i < WallNumber; i++)
-			move_walls(&g_wall_hexa[i], normal, 4);
+			move_walls(&g_wall_hexa[i], normal, 4); // rotation_Time과 동일하게 할 것. 변수로 변경 대기시간 10초로 하기 위함
 
 		for (int i = 0; i < 6; i++)
 		{
@@ -132,7 +146,7 @@ void game_update(void)
 		CP_Settings_TextSize(100);
 		char buffer[16] = { 0 };
 		CP_Settings_Fill(red);
-		sprintf_s(buffer, 16, "%.2f", g_char.Time);
+		sprintf_s(buffer, 16, "%.2f", g_char.total_Time);
 		CP_Font_DrawText("Alive Time:", 380, 400);
 		CP_Font_DrawText(buffer, 720, 400);
 

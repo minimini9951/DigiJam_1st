@@ -12,10 +12,10 @@ void draw_walls(struct HEXAGON* hexagon, int isefwall)
 			float y1 = hexagon->center.y - hexagon->radius * sinf(CP_Math_Radians(30 + hexagon->angle + 60 * i));
 			float x2 = hexagon->center.x + hexagon->radius * cosf(CP_Math_Radians(30 + hexagon->angle + 60 * (i + 1)));
 			float y2 = hexagon->center.y - hexagon->radius * sinf(CP_Math_Radians(30 + hexagon->angle + 60 * (i + 1)));
-			if(isefwall)
-				CP_Settings_Stroke(CP_Color_Create(0, 0, 255, 255));
-			else
-				CP_Settings_Stroke(CP_Color_Create(255, 255, 255, 255));
+			//if(isefwall)
+			//	CP_Settings_Stroke(CP_Color_Create(0, 0, 255, 255));
+			//else
+			//	CP_Settings_Stroke(CP_Color_Create(255, 255, 255, 255));
 			CP_Graphics_DrawLine(x1, y1, x2, y2);
 		}
 	}

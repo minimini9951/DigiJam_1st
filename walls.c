@@ -105,7 +105,7 @@ void set_empty(struct HEXAGON* hexagon)
 
 void create_hexa(struct HEXAGON* hexagon, float base, int efornot, int index)
 {
-	hexagon->angle = 0;
+	hexagon->angle = g_angle.random_angle;
 	const float d = 90;
 	const float t = 1;
 
@@ -176,6 +176,7 @@ void make_effect(int area)
 	empty_hexa->radius = g_wall_hexa[0].min_radius;
 	empty_hexa->min_radius = g_wall_hexa[0].min_radius;
 	empty_hexa->max_radius = g_wall_hexa[0].max_radius;
+	empty_hexa->angle = g_wall_hexa[0].angle;
 
 	for (int i = 0; i < 6; i++)
 	{
@@ -222,6 +223,7 @@ void change_bigeftowall(struct HEXAGON* hexagon_arr, int size, struct HEXAGON* h
 	hexagon->radius = closest_hexa->radius;
 	hexagon->min_radius = closest_hexa->radius;
 	hexagon->max_radius = closest_hexa->radius;
+	hexagon->angle = closest_hexa->angle;
 
 	for (int i = 0; i < 6; i++)
 	{
