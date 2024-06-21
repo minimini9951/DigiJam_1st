@@ -72,7 +72,7 @@ void game_update(void)
 
 		move_char(&g_char);
 		for (int i = 0; i < WallNumber; i++)
-			move_walls(&g_wall_hexa[i], normal, 6);
+			move_walls(&g_wall_hexa[i], normal, 4);
 
 		for (int i = 0; i < 6; i++)
 		{

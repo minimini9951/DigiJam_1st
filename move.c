@@ -9,14 +9,14 @@ void move_walls(struct HEXAGON* hexagon, int dir, float total_sec)
 	//벽이 작은 육각형에 가는 시간
 	float frame = CP_System_GetDt(); //마지막 프레임에서 경과된 시간(초)을 반환합니다
 	
-	//hexagon->angle += 15 * CP_System_GetDt();
+	hexagon->angle += 15 * CP_System_GetDt();
 
 	//Reset hexa
 	if (hexagon->sec >= total_sec)//육각형의 sec이 5보다 크거나 같으면
 	{
 		hexagon->sec = 0;//다시 0으로 초기화
 
-		if (dir)
+		if (dir == normal)
 		{
 			//random walls
 			hexagon->amount = walls_count();
@@ -71,7 +71,7 @@ void move_char(struct CHARACTER* character)
 	if (character->pos == -1)
 	{
 		//move
-		character->move -= CP_System_GetDt() * 600;
+		character->move -= CP_System_GetDt() * 450;
 		if (character->move <= 60 * character->count)
 		{
 			character->pos = 0;
@@ -90,7 +90,7 @@ void move_char(struct CHARACTER* character)
 	}
 	if (character->pos == 1)
 	{
-		character->move += CP_System_GetDt() * 600;
+		character->move += CP_System_GetDt() * 450;
 		if (character->move >= 60 * character->count)
 		{
 			character->pos = 0;
