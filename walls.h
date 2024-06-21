@@ -22,11 +22,18 @@ struct CHARACTER
 	float Time;
 };
 
+enum wall_type
+{
+	blue_ef = 0,
+	normal = 1,
+	big = 2
+};
+
 int walls_count();
 void walls_position(struct HEXAGON* hexagon, int random_number);
 int move_to_angle(float move);
 int get_area_index(int angle);
-int check_empty(struct HEXAGON* hexagon);
+int check_count(struct HEXAGON* hexagon);
 void make_wall(struct HEXAGON* hexagon, int area);
 void check_walls(struct HEXAGON* hexagon);
 void set_empty(struct HEXAGON* hexagon);

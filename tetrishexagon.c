@@ -52,8 +52,12 @@ void game_update(void)
 {
 	CP_Color black = CP_Color_Create(0, 0, 0, 255);
 	CP_Color white = CP_Color_Create(255, 255, 255, 255);
-	CP_Color blue = CP_Color_Create(0, 0, 255, 255);
 	CP_Color red = CP_Color_Create(255, 0, 0, 255);
+	CP_Color green = CP_Color_Create(0, 255, 0, 255);
+	CP_Color blue = CP_Color_Create(0, 0, 255, 255);
+	CP_Color red_green = CP_Color_Create(255, 255, 0, 255);
+	//CP_Color green_blue = CP_Color_Create(0, 255, 255, 255);
+
 	CP_Graphics_ClearBackground(black);
 	CP_Settings_Stroke(white);
 
@@ -64,26 +68,36 @@ void game_update(void)
 	//FindClosestHexa
 	if (g_char.Alive == 1) {
 
-		g_char.Time +=CP_System_GetDt();//시간을 계속 저장하는 함수
-				
-		struct HEXAGON* close_wall = find_closest_hexa(g_wall_hexa, WallNumber);
-		move_char(close_wall, &g_char);
+		g_char.Time += CP_System_GetDt();//시간을 계속 저장하는 함수
+
+		move_char(&g_char);
 		for (int i = 0; i < WallNumber; i++)
-			move_walls(&g_wall_hexa[i], 1, 10);
+			move_walls(&g_wall_hexa[i], normal, 6);
 
 		for (int i = 0; i < 6; i++)
 		{
-			move_walls(&g_efhexa[i], 0, 4);
-			move_walls(&g_big_efhexa[i], 0, 1);
-			change_eftowall(&g_wall_hexa[0], WallNumber, &g_efhexa[i]);
+			if (check_count(&g_efhexa[i]) >= 1)
+			{
+				move_walls(&g_efhexa[i], blue_ef, 2);
+				change_eftowall(&g_wall_hexa[0], WallNumber, &g_efhexa[i]);
+			}
+
+			if (check_count(&g_big_efhexa[i]) >= 1)
+			{
+				move_walls(&g_big_efhexa[i], big, 1);
+			}
 
 		}
 		//Check if player collided //선수를 죽이다
-		//if (collision_check(close_wall, &g_char) == 1)
-		//{
-		//	//End Game Code
-		//	g_char.Alive = 0;//Die
-		//}
+		struct HEXAGON* close_wall = find_closest_hexa(g_wall_hexa, WallNumber);
+		if (close_wall != NULL)
+		{
+			if (collision_check(close_wall, &g_char) == 1)
+			{
+				//End Game Code
+				g_char.Alive = 0;//Die
+			}
+		}
 	}
 
 	//DRAW
@@ -96,11 +110,13 @@ void game_update(void)
 
 	for (int i = 0; i < 6; i++)
 	{
-		CP_Settings_Stroke(blue);
-		draw_walls(&g_efhexa[i], 1);
+		CP_Settings_Stroke(red_green);
+		int count = check_count(&g_efhexa[i]);
+		if (count >= 1 && count < 6)
+			draw_walls(&g_efhexa[i], 1);
 
-		CP_Color col = CP_Color_Lerp(red, blue, g_big_efhexa[i].sec / 0.5f);
-		CP_Settings_Stroke(col);
+		//CP_Color col = CP_Color_Lerp(green, green_blue, g_big_efhexa[i].sec / 0.5f);
+		CP_Settings_Stroke(green);
 		draw_walls(&g_big_efhexa[i], 1);
 	}
 

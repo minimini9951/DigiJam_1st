@@ -48,27 +48,25 @@ int get_area_index(int angle) //
 	}
 }
 
-int check_empty(struct HEXAGON* hexagon)
+int check_count(struct HEXAGON* hexagon)
 {
 	int count = 0;
 	for (int i = 0; i < 6; i++)
 	{
-		if (hexagon->arr[i] == 0)
+		if (hexagon->arr[i] == 1)
 		{
 			count++;
-			if (count == 6)
-				return 0;
 		}
 	}
-	return 1;
+	return count;
 }
 
 void make_wall(struct HEXAGON* hexagon, int area)
 {
-	int check_null = check_empty(hexagon);
+	int check_null = check_count(hexagon);
 	for (int i = 0; i < 6; i++)
 	{
-		if (area == i && hexagon->arr[i] == 0 && check_null)
+		if (area == i && hexagon->arr[i] == 0 && check_null >= 1)
 		{
 			hexagon->arr[i] = 1;
 		}
@@ -108,7 +106,7 @@ void set_empty(struct HEXAGON* hexagon)
 void create_hexa(struct HEXAGON* hexagon, float base, int efornot, int index)
 {
 	hexagon->angle = 0;
-	const float d = 100;
+	const float d = 90;
 	const float t = 1;
 
 	hexagon->center.x = CP_System_GetDisplayHeight() / 2.0f;
@@ -116,10 +114,10 @@ void create_hexa(struct HEXAGON* hexagon, float base, int efornot, int index)
 
 	if (!efornot)
 	{
-		hexagon->sec = WallNumber - index * t;
+		hexagon->sec = /*WallNumber - */index * t;
 		hexagon->radius = base + index * d;
-		hexagon->max_radius = base + 3 * d;
-		hexagon->min_radius = base / 5;
+		hexagon->max_radius = base + 6 * d;
+		hexagon->min_radius = base / 6;
 		hexagon->amount = walls_count();
 		walls_position(hexagon, hexagon->amount);
 	}
@@ -140,13 +138,15 @@ struct HEXAGON* find_closest_hexa(struct HEXAGON* hexagon, int size)
 	for (int i = 0; i < size; i++)
 	{
 		//Not count empty
-		if (!check_empty(&hexagon[i]))
+		if (check_count(&hexagon[i]) == 0)
 			continue;
 
-		if(res == NULL)
-			res = &hexagon[i];
-
-		if (hexagon[i].radius < res->radius)
+		if (res == NULL)
+		{
+			if(hexagon[i].radius > hexagon[i].min_radius * 1.5f)
+				res = &hexagon[i];
+		}
+		else if (hexagon[i].radius < res->radius && hexagon[i].radius > hexagon[i].min_radius * 1.5f) //radius has to be > player
 		{
 			res = &hexagon[i];
 		}
@@ -159,7 +159,7 @@ struct HEXAGON* find_empty_hexa(struct HEXAGON* hexagon, int size)
 {
 	for (int i = 0; i < size; i++)
 	{
-		if (!check_empty(&hexagon[i]))
+		if (check_count(&hexagon[i]) == 0)
 			return &hexagon[i];
 	}
 
@@ -173,9 +173,9 @@ void make_effect(int area)
 	if (empty_hexa == NULL)
 		return;
 
-	empty_hexa->radius = g_wall_hexa[0].min_radius * 1.5f;
-	empty_hexa->min_radius = g_wall_hexa[0].min_radius * 1.5f;
-	empty_hexa->max_radius = g_wall_hexa[0].max_radius * 1.5f;
+	empty_hexa->radius = g_wall_hexa[0].min_radius;
+	empty_hexa->min_radius = g_wall_hexa[0].min_radius;
+	empty_hexa->max_radius = g_wall_hexa[0].max_radius;
 
 	for (int i = 0; i < 6; i++)
 	{
@@ -208,6 +208,7 @@ void change_eftowall(struct HEXAGON* hexagon_arr, int size, struct HEXAGON* hexa
 		}
 		//reset the effect to empty
 		set_empty(hexagon);
+		hexagon->sec = 0;
 	}
 }
 
