@@ -140,7 +140,8 @@ void confused(struct CHARACTER* character)
 	if (character->confusedCounters_arr[character->confusedCounter] == 0)
 		character->confusedCounters_arr[character->confusedCounter] = character->copyCounter;
 
-	for(int i = character->confusedCounter; i < 6; i++)
+	for (int i = character->confusedCounter; i < 6; i++)
+	{
 		if (character->confusedCounters_arr[i] != 0)
 		{
 			character->confusedCounter++;
@@ -172,10 +173,20 @@ void confused(struct CHARACTER* character)
 							character->confused = 0;
 						}
 					}
-
 				}
+				character->confusedCounter = 0;
+				character->still_confused = 0;
 			}
 		}
+	}
 	// In confused condition, 50% move reverse position
+	if (character->confused)
+	{
+		if (CP_Random_RangeInt(0, 1))
+			character->pos *= -1;
+		character->moveConfuse++;
+	}
 	// If move 3 times in confused, exit confused.
+	if (character->moveConfuse == 3)
+		character->confused = 0;
 }

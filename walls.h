@@ -25,7 +25,7 @@ struct CHARACTER
 	int still_confused;
 	int confusedCounters_arr[6];
 	int confused; // 0, 1
-	int breakConfuse;
+	int moveConfuse;
 };
 
 struct RANDOMANGLE

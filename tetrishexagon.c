@@ -51,7 +51,7 @@ void game_init(void)
 	for(int i = 0; i < 6; i++)
 		g_char.confusedCounters_arr[i] = 0;
 	g_char.confused = 0;
-	g_char.breakConfuse = 0;
+	g_char.moveConfuse = 0;
 
 	g_angle.rotation_Time = -6.0f; //-6은 처음대기시간. 변수로 바꿀것
 	//create ehexa
