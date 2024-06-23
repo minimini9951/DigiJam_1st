@@ -86,7 +86,7 @@ void game_update(void)
 
 		move_char(&g_char);
 		for (int i = 0; i < WallNumber; i++)
-			move_walls(&g_wall_hexa[i], normal, 4); // rotation_Time과 동일하게 할 것. 변수로 변경 대기시간 10초로 하기 위함
+			move_walls(&g_wall_hexa[i], normal, 6); // rotation_Time과 동일하게 할 것. 변수로 변경 대기시간 10초로 하기 위함
 
 		for (int i = 0; i < 6; i++)
 		{

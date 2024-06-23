@@ -176,6 +176,8 @@ void confused(struct CHARACTER* character)
 				}
 				character->confusedCounter = 0;
 				character->still_confused = 0;
+				for(int j = 0; j < 6; j++)
+					character->confusedCounters_arr[j] = 0;
 			}
 		}
 	}
@@ -188,5 +190,8 @@ void confused(struct CHARACTER* character)
 	}
 	// If move 3 times in confused, exit confused.
 	if (character->moveConfuse == 3)
+	{
+		character->moveConfuse = 0;
 		character->confused = 0;
+	}
 }
