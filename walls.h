@@ -46,6 +46,13 @@ enum wall_type
 	big = 2
 };
 
+
+struct Speed
+{
+	float wallspeed;
+};
+
+
 int walls_count();
 void walls_position(struct HEXAGON* hexagon, int random_number);
 int move_to_angle(float move);
