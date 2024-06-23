@@ -185,7 +185,17 @@ void confused(struct CHARACTER* character)
 	if (character->confused)
 	{
 		if (CP_Random_RangeInt(0, 1))
+		{
+			if (character->pos * -1 == -1)
+			{
+				character->count -= 2;
+			}
+			else if (character->pos * -1 == 1)
+			{
+				character->count += 2;
+			}
 			character->pos *= -1;
+		}
 		character->moveConfuse++;
 	}
 	// If move 3 times in confused, exit confused.
