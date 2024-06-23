@@ -10,6 +10,7 @@ struct HEXAGON
 	int amount; //not
 	float sec; //À°°¢Çü ½Ã°£ 
 	int arr[6]; //diff
+
 };
 
 struct CHARACTER
@@ -36,16 +37,6 @@ struct RANDOMANGLE
 {
 	float rotation_Time;
 	float random_angle;
-};
-
-struct COLORS
-{
-	CP_Color start_color;
-	CP_Color goal_color;
-	CP_Color current_color;
-
-	int first;
-	float col_sec;
 };
 
 enum wall_type
@@ -78,4 +69,4 @@ extern struct HEXAGON g_efhexa[6];
 extern struct HEXAGON g_big_efhexa[6];
 extern struct CHARACTER g_char;
 extern struct RANDOMANGLE g_angle;
-extern struct COLORS colors;
+extern struct COLORS g_colors;

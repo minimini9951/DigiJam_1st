@@ -7,9 +7,10 @@
 #include"tetrishexagon.h"
 #include "MainMenu.h"
 #include "color.h"
-#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#define _USE_MATH_DEFINES
+#include <math.h>
 #define _CRT_SECURE_NO_WARNINGS
 
 struct HEXAGON g_wall_hexa[WallNumber];
@@ -17,7 +18,11 @@ struct HEXAGON g_efhexa[6];
 struct HEXAGON g_big_efhexa[6];
 struct CHARACTER g_char;
 struct RANDOMANGLE g_angle;
-struct COLORS colors;
+struct COLORS g_colors;
+
+int amplitude = 4;
+int frequency = 2;
+int offset = 6;
 
 CP_Font myFont;
 CP_TEXT_ALIGN_HORIZONTAL Horizontal = CP_TEXT_ALIGN_H_CENTER;
@@ -52,23 +57,19 @@ void game_init(void)
 
 	g_angle.rotation_Time = -6.0f; //-6은 처음대기시간. 변수로 바꿀것
 
-	colors.first = 0;
-	colors.col_sec = 0.0f;
-	make_wall_color(&colors);
+	g_colors.first = 0;
+	g_colors.col_sec = 0.0f;
+	make_wall_color(&g_colors, &g_angle);
 }
 
 void game_update(void)
 {
-	//CP_Color black = CP_Color_Create(0, 0, 0, 255);
 	CP_Color white = CP_Color_Create(255, 255, 255, 255);
 	CP_Color red = CP_Color_Create(255, 0, 0, 255);
-	CP_Color green = CP_Color_Create(0, 255, 0, 255);
 	CP_Color blue = CP_Color_Create(0, 0, 255, 255);
 	CP_Color red_green = CP_Color_Create(255, 255, 0, 255);
 
-	CP_Graphics_ClearBackground(colors.current_color);
-	//make_wall_color();
-	CP_Settings_Stroke(white);
+	CP_Graphics_ClearBackground(g_colors.current_color);
 
 	CP_Settings_TextAlignment(Horizontal, Vertical);
 	CP_Settings_TextSize(160);
@@ -116,23 +117,30 @@ void game_update(void)
 	}
 
 	//DRAW
-	make_wall_color(&colors);
+	make_wall_color(&g_colors, &g_angle);
+	CP_Settings_Stroke(g_colors.bright_current);
 	draw_line(&g_wall_hexa[0]);
 	for (int i = 0; i < WallNumber; i++)
+	{
+		CP_Settings_Stroke(g_colors.bright_current);
+		float stroke_length = amplitude * cosf(g_char.total_Time * (float)M_PI * frequency) + offset;
+		CP_Settings_StrokeWeight(stroke_length);
 		draw_walls(&g_wall_hexa[i], 0);
+	}
 
 	draw_min_walls(&g_wall_hexa[0]);
+	CP_Settings_StrokeWeight(2.0f);
 	draw_char(&g_wall_hexa[0], &g_char);
 
 	for (int i = 0; i < 6; i++)
 	{
-		CP_Settings_Stroke(red_green);
 		int count = check_count(&g_efhexa[i]);
 		if (count >= 1 && count < 6)
+			CP_Settings_StrokeWeight(4.0f);
 			draw_walls(&g_efhexa[i], 1);
 
-		//CP_Color col = CP_Color_Lerp(green, green_blue, g_big_efhexa[i].sec / 0.5f);
-		CP_Settings_Stroke(green);
+		CP_Settings_Stroke(g_colors.big_current);
+		CP_Settings_StrokeWeight(5.0f);
 		draw_walls(&g_big_efhexa[i], 1);
 	}
 

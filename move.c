@@ -14,7 +14,7 @@ void rotate_wall(struct HEXAGON* hexagon, struct RANDOMANGLE* angle)
 		else
 			angle->random_angle = -1 * (float)CP_Random_RangeInt(45, 75);
 
-		angle->rotation_Time = 0;
+		//angle->rotation_Time = 0;
 	}
 	else
 	{
