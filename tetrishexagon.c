@@ -9,6 +9,8 @@
 #include "color.h"
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
+#define _CRT_SECURE_NO_WARNINGS
 
 struct HEXAGON g_wall_hexa[WallNumber];
 struct HEXAGON g_efhexa[6];
@@ -60,7 +62,6 @@ void game_init(void)
 	colors.first = 0;
 	colors.col_sec = 0.0f;
 	make_wall_color(&colors);
-}
 
 void game_update(void)
 {
@@ -77,6 +78,7 @@ void game_update(void)
 
 	CP_Settings_TextAlignment(Horizontal, Vertical);
 	CP_Settings_TextSize(160);
+
 
 	//MOVE
 	//FindClosestHexa
@@ -143,17 +145,66 @@ void game_update(void)
 
 	if (g_char.Alive == 0)
 	{
+		CP_Settings_TextSize(100);
+		//성공(읽는 파트,쓰기 파트 성공), g_char.total_Time 게임 첫 스타트
+		FILE* fp;
+		float value = 0.000f;
+		char read_txt[16] = { 0 };//txt파일에 있는 값만 읽어서 저장하는 배열
+		char BestRead[16] = { 0 };//갱신해야 할 값 저장하는  배열
+		char PastBest[16] = { 0 };
+
+		fopen_s(&fp, "Assets/BestTime.txt", "r");
+		if (fgets(read_txt, sizeof(read_txt), fp) == NULL) 
+		{
+			fclose(fp);
+			fopen_s(&fp, "Assets/BestTime.txt", "w");
+			fprintf(fp, "%.2f", value);
+			fclose(fp);
+		}
+		else
+		{
+			fgets(read_txt, sizeof(read_txt), fp);
+			g_char.Best_TimeTXT = (float)atof(read_txt);
+			fclose(fp);
+		}
+
+		if (g_char.Best_TimeTXT<g_char.total_Time)
+		{
+			fopen_s(&fp, "Assets/BestTime.txt", "w");
+			fprintf(fp, "%.2f", g_char.total_Time);
+			fclose(fp);
+
+			fopen_s(&fp, "Assets/BestTime.txt", "r");
+			CP_Settings_Fill(red_green);
+			fgets(BestRead, sizeof(BestRead), fp);
+			CP_Font_DrawText("Best Time:", 380, 550);
+			CP_Font_DrawText(BestRead, 720, 550);
+			fclose(fp);
+		}
+		else
+		{
+			//성공한 테스트 부분
+			fopen_s(&fp, "Assets/BestTime.txt", "r");
+			CP_Settings_Fill(red_green);
+			fgets(PastBest, sizeof(PastBest), fp);
+			CP_Font_DrawText("Best Time:", 380, 550);
+			CP_Font_DrawText(PastBest, 720, 550);
+			fclose(fp);
+		}
+
+
+
 		//Game Over Text
+		DrawRect_GameOver(blue, 390, 5, 300, 250);
 		CP_Settings_Fill(white);//색상은 취향껏
 		CP_Font_DrawText("Game", 540, 40);
 		CP_Font_DrawText("Over", 540, 195);
 		//Game Play Time 
-		CP_Settings_TextSize(100);
-		char buffer[16] = { 0 };
+		char buffer_totalTime[16] = { 0 };//현재 게임 플레이 하는 시간
 		CP_Settings_Fill(red);
-		sprintf_s(buffer, 16, "%.2f", g_char.total_Time);
+		sprintf_s(buffer_totalTime, 16, "%.2f", g_char.total_Time);//현재 게임 시간 저장
 		CP_Font_DrawText("Alive Time:", 380, 400);
-		CP_Font_DrawText(buffer, 720, 400);
+		CP_Font_DrawText(buffer_totalTime, 720, 400);
 
 
 		//Game Restart Button

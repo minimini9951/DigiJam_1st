@@ -19,7 +19,10 @@ struct CHARACTER
 	float move;
 	int area;
 	int Alive;//살아있는 판정
+
 	float total_Time;
+	float Best_TimeTXT;//텍스트파일의 값 받아오는 변수
+
 
 	int copyCounter;
 	int confusedCounter;
