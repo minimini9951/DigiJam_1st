@@ -23,13 +23,6 @@ CP_Font myFont;
 CP_TEXT_ALIGN_HORIZONTAL Horizontal = CP_TEXT_ALIGN_H_CENTER;
 CP_TEXT_ALIGN_VERTICAL Vertical = CP_TEXT_ALIGN_V_MIDDLE;
 
-void DrawRect_GameOver(CP_Color color, float x, float y, float w, float h)
-{
-	CP_Settings_Fill(color);
-	CP_Graphics_DrawRect(x, y, w, h);
-}
-
-
 void game_init(void)
 {
 	myFont = CP_Font_Load("Assets/Exo2-Regular.ttf");
@@ -52,7 +45,7 @@ void game_init(void)
 	g_char.total_Time = 0; //ALive Time
 
 	g_char.copyCounter = 0;
-	for(int i = 0; i < 6; i++)
+	for (int i = 0; i < 6; i++)
 		g_char.confusedCounters_arr[i] = 0;
 	g_char.confused = 0;
 	g_char.moveConfuse = 0;
@@ -62,6 +55,7 @@ void game_init(void)
 	colors.first = 0;
 	colors.col_sec = 0.0f;
 	make_wall_color(&colors);
+}
 
 void game_update(void)
 {
