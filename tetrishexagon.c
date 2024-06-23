@@ -193,6 +193,7 @@ void game_update(void)
 
 
 		//Game Over Text
+		DrawRect_GameOver(blue, 390, 5, 300, 250);
 		CP_Settings_Fill(white);//색상은 취향껏
 		CP_Font_DrawText("Game", 540, 40);
 		CP_Font_DrawText("Over", 540, 195);
