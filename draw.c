@@ -52,8 +52,9 @@ void draw_line(struct HEXAGON* hexagon)
 	}
 }
 
-void DrawRect_GameOver(CP_Color color, float x, float y, float w, float h)
+void DrawRect_GameOver(CP_Color color1,CP_Color color2, float x, float y, float w, float h)
 {
-	CP_Settings_Fill(color);
+	CP_Color lerp = CP_Color_Lerp(color1, color2, 0.5f);
+	CP_Settings_Fill(lerp);
 	CP_Graphics_DrawRect(x, y, w, h);
 }

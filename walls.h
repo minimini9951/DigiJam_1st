@@ -28,7 +28,7 @@ struct CHARACTER
 	int copyCounter;
 	int confusedCounter;
 	int still_confused;
-	int confusedCounters_arr[6];
+	int confusedCounters_arr[12];
 	int confused; // 0, 1
 	int moveConfuse;
 };
@@ -69,7 +69,7 @@ void change_eftowall(struct HEXAGON* hexagon_arr, int size, struct HEXAGON* hexa
 void change_bigeftowall(struct HEXAGON* hexagon_arr, int size, struct HEXAGON* hexagon);
 
 #define WallNumber 4
-#define ColorMax 255
+#define ColorMax 180
 
 extern struct HEXAGON g_wall_hexa[WallNumber];
 extern struct HEXAGON g_efhexa[6];

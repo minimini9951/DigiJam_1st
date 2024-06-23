@@ -66,11 +66,13 @@ void game_init(void)
 }
 void game_update(void)
 {
-	CP_Color black = CP_Color_Create(0, 0, 0, 255);
-	CP_Color white = CP_Color_Create(255, 255, 255, 255);
-	CP_Color red = CP_Color_Create(255, 0, 0, 255);
-	CP_Color blue = CP_Color_Create(0, 0, 255, 255);
-	CP_Color red_green = CP_Color_Create(255, 255, 0, 255);
+	
+	//CP_Color black = CP_Color_Create(0, 0, 0, 255);
+	CP_Color white = CP_Color_Create(225, 225, 225, 255);
+	//CP_Color red = CP_Color_Create(255, 0, 0, 255);
+	//CP_Color blue = CP_Color_Create(0, 0, 255, 255);
+	//CP_Color red_green = CP_Color_Create(255, 255, 0, 255);
+	
 
 	CP_Graphics_ClearBackground(g_colors.current_color);
 
@@ -127,7 +129,7 @@ void game_update(void)
 			}
 		}
 		//생존시간 부분
-		CP_Settings_Fill(black);
+		CP_Settings_Fill(g_colors.bright_current);
 		CP_Settings_TextSize(50);
 		char buffer_AliveTime[16] = { 0 };
 		sprintf_s(buffer_AliveTime, 16, "%.2f", g_char.total_Time);
@@ -174,56 +176,70 @@ void game_update(void)
 		char PastBest[16] = { 0 };
 
 		fopen_s(&fp, "Assets/BestTime.txt", "r");
-		if (fgets(read_txt, sizeof(read_txt), fp) == NULL) 
+		if (fp != NULL)
 		{
-			fclose(fp);
-			fopen_s(&fp, "Assets/BestTime.txt", "w");
-			fprintf(fp, "%.2f", value);
-			fclose(fp);
-		}
-		else
-		{
-			fgets(read_txt, sizeof(read_txt), fp);
-			g_char.Best_TimeTXT = (float)atof(read_txt);
-			fclose(fp);
+
+			if (fgets(read_txt, sizeof(read_txt), fp) == 0)
+			{
+				fclose(fp);
+				fopen_s(&fp, "Assets/BestTime.txt", "w");
+				fprintf(fp, "%.2f", value);
+				fclose(fp);
+			}
+			else
+			{
+				fgets(read_txt, sizeof(read_txt), fp);
+				g_char.Best_TimeTXT = (float)atof(read_txt);
+				fclose(fp);
+			}
 		}
 
 		if (g_char.Best_TimeTXT<g_char.total_Time)
 		{
 			fopen_s(&fp, "Assets/BestTime.txt", "w");
-			fprintf(fp, "%.2f", g_char.total_Time);
-			fclose(fp);
+
+			if (fp != NULL) 
+			{
+				fprintf_s(fp, "%.2f", g_char.total_Time);
+				fclose(fp);
+			}
 
 			fopen_s(&fp, "Assets/BestTime.txt", "r");
-			DrawRect_GameOver(red_green, 150, 500, 680, 100);
-			CP_Settings_Fill(black);
-			fgets(BestRead, sizeof(BestRead), fp);
-			CP_Font_DrawText("Best Time:", 380, 550);
-			CP_Font_DrawText(BestRead, 720, 550);
-			fclose(fp);
+			if (fp != NULL)
+			{
+				DrawRect_GameOver(g_colors.current_color, g_colors.bright_current, 150, 500, 680, 100);
+				CP_Settings_Fill(white);
+				fgets(BestRead, sizeof(BestRead), fp);
+				CP_Font_DrawText("Best Time:", 380, 550);
+				CP_Font_DrawText(BestRead, 720, 550);
+				fclose(fp);
+			}
 		}
 		else
 		{
 			//성공한 테스트 부분
 			fopen_s(&fp, "Assets/BestTime.txt", "r");
-			DrawRect_GameOver(red_green, 150, 500, 680, 100);
-			CP_Settings_Fill(black);
-			fgets(PastBest, sizeof(PastBest), fp);
-			CP_Font_DrawText("Best Time:", 380, 550);
-			CP_Font_DrawText(PastBest, 720, 550);
-			fclose(fp);
+			if (fp != NULL)
+			{
+				DrawRect_GameOver(g_colors.current_color, g_colors.bright_current, 150, 500, 680, 100);
+				CP_Settings_Fill(white);
+				fgets(PastBest, sizeof(PastBest), fp);
+				CP_Font_DrawText("Best Time:", 380, 550);
+				CP_Font_DrawText(PastBest, 720, 550);
+				fclose(fp);
+			}
 		}
 
 
 
 		//Game Over Text
-		DrawRect_GameOver(blue, 390, 5, 300, 250);
+		DrawRect_GameOver(g_colors.current_color, g_colors.bright_current, 390, 5, 300, 250);
 		CP_Settings_Fill(white);//색상은 취향껏
 		CP_Font_DrawText("Game", 540, 40);
 		CP_Font_DrawText("Over", 540, 195);
 		//Game Play Time 
 		char buffer_totalTime[16] = { 0 };//현재 게임 플레이 하는 시간
-		DrawRect_GameOver(red, 150, 360, 680, 100);
+		DrawRect_GameOver(g_colors.current_color, g_colors.bright_current, 150, 360, 680, 100);
 		CP_Settings_Fill(white);
 		sprintf_s(buffer_totalTime, 16, "%.2f", g_char.total_Time);//현재 게임 시간 저장
 		CP_Font_DrawText("Alive Time:", 380, 400);
@@ -232,12 +248,12 @@ void game_update(void)
 
 		//Game Restart Button
 		CP_Settings_TextSize(80);
-		DrawRect_GameOver(blue, 390, 650, 300, 100);
+		DrawRect_GameOver(g_colors.current_color, g_colors.bright_current, 390, 650, 300, 100);
 		CP_Settings_Fill(white);
 		CP_Font_DrawText("ReStart", 540, 690);
 
 		CP_Settings_TextSize(70);
-		DrawRect_GameOver(blue, 390, 800, 300, 100);
+		DrawRect_GameOver(g_colors.current_color, g_colors.bright_current, 390, 800, 300, 100);
 		CP_Settings_Fill(white);
 		CP_Font_DrawText("MainMenu", 540, 850);
 

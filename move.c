@@ -4,6 +4,7 @@
 #include "utils.h"
 #include "draw.h"
 
+
 void rotate_wall(struct HEXAGON* hexagon, struct RANDOMANGLE* angle)
 {
 	if (angle->rotation_Time >= 10) // 18초 경과시
@@ -140,19 +141,19 @@ void confused(struct CHARACTER* character)
 	if (character->confusedCounters_arr[character->confusedCounter] == 0)
 		character->confusedCounters_arr[character->confusedCounter] = character->copyCounter;
 
-	for (int i = character->confusedCounter; i < 6; i++)
+	for (int i = character->confusedCounter; i < 12; i++)
 	{
 		if (character->confusedCounters_arr[i] != 0)
 		{
 			character->confusedCounter++;
-			if (character->confusedCounter == 6)
+			if (character->confusedCounter == 12)
 			{
-				for (int j = 0; j < 5; j++)
+				for (int j = 0; j < 11; j++)
 				{
 					if (character->confusedCounters_arr[j + 1] == character->confusedCounters_arr[j] + 1)
 					{
 						character->still_confused++;
-						if (character->still_confused == 5)
+						if (character->still_confused == 11)
 						{
 							character->confused = 1;
 						}
@@ -164,7 +165,7 @@ void confused(struct CHARACTER* character)
 					if (character->confusedCounters_arr[j + 1] == character->confusedCounters_arr[j] - 1)
 					{
 						character->still_confused--;
-						if (character->still_confused == -5)
+						if (character->still_confused == -11)
 						{
 							character->confused = 1;
 						}
@@ -176,7 +177,7 @@ void confused(struct CHARACTER* character)
 				}
 				character->confusedCounter = 0;
 				character->still_confused = 0;
-				for(int j = 0; j < 6; j++)
+				for(int j = 0; j < 12; j++)
 					character->confusedCounters_arr[j] = 0;
 			}
 		}
@@ -199,7 +200,7 @@ void confused(struct CHARACTER* character)
 		character->moveConfuse++;
 	}
 	// If move 3 times in confused, exit confused.
-	if (character->moveConfuse == 3)
+	if (character->moveConfuse == 6)
 	{
 		character->moveConfuse = 0;
 		character->confused = 0;

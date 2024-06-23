@@ -6,7 +6,12 @@
 #include "draw.h"
 #include"tetrishexagon.h"
 #include "MainMenu.h"
+#include "color.h"
+#include <stdio.h>
+#include <stdlib.h>
+#define _USE_MATH_DEFINES
 #include <math.h>
+#define _CRT_SECURE_NO_WARNINGS
 
 #define DisplayLength 540
 #define Base 300
@@ -36,10 +41,10 @@ void Main_Menu_Init(void)
 void Main_Menu_Update(void) 
 {
 
-	CP_Color color_red = CP_Color_Create(255, 0, 0, 255);//»¡°£»ö ÀúÀå
-	CP_Color color_black = CP_Color_Create(0, 0, 0, 255);
+	CP_Color color_red = CP_Color_Create(225, 0, 0, 255);//»¡°£»ö ÀúÀå
+	CP_Color color_black = CP_Color_Create(30, 30, 30, 255);
 	CP_Graphics_ClearBackground(color_black);
-	CP_Color color_white = CP_Color_Create(255, 255, 255, 255);
+	CP_Color color_white = CP_Color_Create(225, 225, 225, 255);
 
 	DrawRect(color_red, DisplayLength-(Base/2), 500, Base, 100);
 	CP_Settings_Fill(color_black);
