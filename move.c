@@ -184,7 +184,7 @@ void confused(struct CHARACTER* character)
 	// In confused condition, 50% move reverse position
 	if (character->confused)
 	{
-		if (CP_Random_RangeInt(0, 1))
+		if (CP_Random_RangeInt(0, 3))
 		{
 			if (character->pos * -1 == -1)
 			{

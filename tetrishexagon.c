@@ -6,6 +6,7 @@
 #include "draw.h"
 #include"tetrishexagon.h"
 #include "MainMenu.h"
+#include "color.h"
 #include <math.h>
 #include <stdio.h>
 
@@ -14,6 +15,7 @@ struct HEXAGON g_efhexa[6];
 struct HEXAGON g_big_efhexa[6];
 struct CHARACTER g_char;
 struct RANDOMANGLE g_angle;
+struct COLORS colors;
 
 CP_Font myFont;
 CP_TEXT_ALIGN_HORIZONTAL Horizontal = CP_TEXT_ALIGN_H_CENTER;
@@ -54,21 +56,23 @@ void game_init(void)
 	g_char.moveConfuse = 0;
 
 	g_angle.rotation_Time = -6.0f; //-6은 처음대기시간. 변수로 바꿀것
-	//create ehexa
-	//create gbighexa
+
+	colors.first = 0;
+	colors.col_sec = 0.0f;
+	make_wall_color(&colors);
 }
 
 void game_update(void)
 {
-	CP_Color black = CP_Color_Create(0, 0, 0, 255);
+	//CP_Color black = CP_Color_Create(0, 0, 0, 255);
 	CP_Color white = CP_Color_Create(255, 255, 255, 255);
 	CP_Color red = CP_Color_Create(255, 0, 0, 255);
 	CP_Color green = CP_Color_Create(0, 255, 0, 255);
 	CP_Color blue = CP_Color_Create(0, 0, 255, 255);
 	CP_Color red_green = CP_Color_Create(255, 255, 0, 255);
-	//CP_Color green_blue = CP_Color_Create(0, 255, 255, 255);
 
-	CP_Graphics_ClearBackground(black);
+	CP_Graphics_ClearBackground(colors.current_color);
+	//make_wall_color();
 	CP_Settings_Stroke(white);
 
 	CP_Settings_TextAlignment(Horizontal, Vertical);
@@ -116,6 +120,7 @@ void game_update(void)
 	}
 
 	//DRAW
+	make_wall_color(&colors);
 	draw_line(&g_wall_hexa[0]);
 	for (int i = 0; i < WallNumber; i++)
 		draw_walls(&g_wall_hexa[i], 0);

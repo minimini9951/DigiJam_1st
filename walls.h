@@ -20,6 +20,7 @@ struct CHARACTER
 	int area;
 	int Alive;//살아있는 판정
 	float total_Time;
+
 	int copyCounter;
 	int confusedCounter;
 	int still_confused;
@@ -32,6 +33,16 @@ struct RANDOMANGLE
 {
 	float rotation_Time;
 	float random_angle;
+};
+
+struct COLORS
+{
+	CP_Color start_color;
+	CP_Color goal_color;
+	CP_Color current_color;
+
+	int first;
+	float col_sec;
 };
 
 enum wall_type
@@ -57,9 +68,11 @@ void change_eftowall(struct HEXAGON* hexagon_arr, int size, struct HEXAGON* hexa
 void change_bigeftowall(struct HEXAGON* hexagon_arr, int size, struct HEXAGON* hexagon);
 
 #define WallNumber 4
+#define ColorMax 255
 
 extern struct HEXAGON g_wall_hexa[WallNumber];
 extern struct HEXAGON g_efhexa[6];
 extern struct HEXAGON g_big_efhexa[6];
 extern struct CHARACTER g_char;
 extern struct RANDOMANGLE g_angle;
+extern struct COLORS colors;

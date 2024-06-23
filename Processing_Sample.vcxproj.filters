@@ -22,6 +22,9 @@
     <ClCompile Include="tetrishexagon.c">
       <Filter>Source file</Filter>
     </ClCompile>
+    <ClCompile Include="color.c">
+      <Filter>Source file</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header file">
@@ -51,6 +54,9 @@
       <Filter>Header file</Filter>
     </ClInclude>
     <ClInclude Include="MainMenu.h">
+      <Filter>Header file</Filter>
+    </ClInclude>
+    <ClInclude Include="color.h">
       <Filter>Header file</Filter>
     </ClInclude>
   </ItemGroup>
