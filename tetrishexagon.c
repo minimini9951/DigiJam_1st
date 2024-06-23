@@ -18,6 +18,7 @@ struct HEXAGON g_big_efhexa[6];
 struct CHARACTER g_char;
 struct RANDOMANGLE g_angle;
 struct COLORS colors;
+struct Speed wall_speed;
 
 CP_Font myFont;
 CP_TEXT_ALIGN_HORIZONTAL Horizontal = CP_TEXT_ALIGN_H_CENTER;
@@ -50,16 +51,19 @@ void game_init(void)
 	g_char.confused = 0;
 	g_char.moveConfuse = 0;
 
-	g_angle.rotation_Time = -6.0f; //-6은 처음대기시간. 변수로 바꿀것
+	
 
 	colors.first = 0;
 	colors.col_sec = 0.0f;
 	make_wall_color(&colors);
+
+	wall_speed.wallspeed = 6;
+	g_angle.rotation_Time = -1 * wall_speed.wallspeed; //-6은 처음대기시간. 변수로 바꿀것
 }
 
 void game_update(void)
 {
-	//CP_Color black = CP_Color_Create(0, 0, 0, 255);
+	CP_Color black = CP_Color_Create(0, 0, 0, 255);
 	CP_Color white = CP_Color_Create(255, 255, 255, 255);
 	CP_Color red = CP_Color_Create(255, 0, 0, 255);
 	CP_Color green = CP_Color_Create(0, 255, 0, 255);
@@ -85,8 +89,17 @@ void game_update(void)
 		rotate_wall(g_big_efhexa, &g_angle);
 
 		move_char(&g_char);
-		for (int i = 0; i < WallNumber; i++)
-			move_walls(&g_wall_hexa[i], normal, 6); // rotation_Time과 동일하게 할 것. 변수로 변경 대기시간 10초로 하기 위함
+
+
+		for (int i = 0; i < WallNumber; i++) 
+		{
+			move_walls(&g_wall_hexa[i], normal, wall_speed.wallspeed);// rotation_Time과 동일하게 할 것. 변수로 변경 대기시간 10초로 하기 위함
+			//여기가 속도
+		}
+
+		
+
+
 
 		for (int i = 0; i < 6; i++)
 		{
@@ -113,6 +126,12 @@ void game_update(void)
 				g_char.Alive = 0;//Die
 			}
 		}
+		//생존시간 부분
+		CP_Settings_Fill(black);
+		CP_Settings_TextSize(50);
+		char buffer_AliveTime[16] = { 0 };
+		sprintf_s(buffer_AliveTime, 16, "%.2f", g_char.total_Time);
+		CP_Font_DrawText(buffer_AliveTime, 540, 540);
 	}
 
 	//DRAW
@@ -169,7 +188,8 @@ void game_update(void)
 			fclose(fp);
 
 			fopen_s(&fp, "Assets/BestTime.txt", "r");
-			CP_Settings_Fill(red_green);
+			DrawRect_GameOver(red_green, 150, 500, 680, 100);
+			CP_Settings_Fill(black);
 			fgets(BestRead, sizeof(BestRead), fp);
 			CP_Font_DrawText("Best Time:", 380, 550);
 			CP_Font_DrawText(BestRead, 720, 550);
@@ -179,7 +199,8 @@ void game_update(void)
 		{
 			//성공한 테스트 부분
 			fopen_s(&fp, "Assets/BestTime.txt", "r");
-			CP_Settings_Fill(red_green);
+			DrawRect_GameOver(red_green, 150, 500, 680, 100);
+			CP_Settings_Fill(black);
 			fgets(PastBest, sizeof(PastBest), fp);
 			CP_Font_DrawText("Best Time:", 380, 550);
 			CP_Font_DrawText(PastBest, 720, 550);
@@ -195,7 +216,8 @@ void game_update(void)
 		CP_Font_DrawText("Over", 540, 195);
 		//Game Play Time 
 		char buffer_totalTime[16] = { 0 };//현재 게임 플레이 하는 시간
-		CP_Settings_Fill(red);
+		DrawRect_GameOver(red, 150, 360, 680, 100);
+		CP_Settings_Fill(white);
 		sprintf_s(buffer_totalTime, 16, "%.2f", g_char.total_Time);//현재 게임 시간 저장
 		CP_Font_DrawText("Alive Time:", 380, 400);
 		CP_Font_DrawText(buffer_totalTime, 720, 400);
