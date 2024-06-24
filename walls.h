@@ -52,6 +52,13 @@ struct Speed
 	float wallspeed;
 };
 
+struct Image
+{
+	CP_Image logo;
+	float sec;
+	float v;
+};
+
 
 int walls_count();
 void walls_position(struct HEXAGON* hexagon, int random_number);
