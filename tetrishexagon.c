@@ -19,20 +19,22 @@ struct HEXAGON g_big_efhexa[6];
 struct CHARACTER g_char;
 struct RANDOMANGLE g_angle;
 struct COLORS g_colors;
+struct Music music;
+struct Speed wall_speed;
 
 int amplitude = 4;
 int frequency = 2;
 int offset = 6;
 
-struct Speed wall_speed;
-
 CP_Font myFont;
 CP_TEXT_ALIGN_HORIZONTAL Horizontal = CP_TEXT_ALIGN_H_CENTER;
 CP_TEXT_ALIGN_VERTICAL Vertical = CP_TEXT_ALIGN_V_MIDDLE;
+CP_Sound mySound;
+
 
 void game_init(void)
 {
-	myFont = CP_Font_Load("Assets/Exo2-Regular.ttf");
+	myFont = CP_Font_Load("./Assets/Exo2-Regular.ttf");
 
 	int display_height = CP_System_GetDisplayHeight();
 	const float k = 1;
@@ -61,8 +63,12 @@ void game_init(void)
 	g_colors.col_sec = 0.0f;
 	make_wall_color(&g_colors, &g_angle);
 
-	wall_speed.wallspeed = 10;
+	wall_speed.wallspeed = 6;
 	g_angle.rotation_Time = -1 * wall_speed.wallspeed; //-6은 처음대기시간. 변수로 바꿀것
+
+	//Load music
+	mySound = CP_Sound_LoadMusic("./Assets/Elektronomia - Sky High.mp3");
+	music.isPlay = 0;
 }
 void game_update(void)
 {
@@ -72,13 +78,18 @@ void game_update(void)
 	//CP_Color red = CP_Color_Create(255, 0, 0, 255);
 	//CP_Color blue = CP_Color_Create(0, 0, 255, 255);
 	//CP_Color red_green = CP_Color_Create(255, 255, 0, 255);
+
+	//노래 재생부분
 	
+	if (music.isPlay==0) {
+		CP_Sound_PlayAdvanced(mySound, 0.6f, 1.0f, TRUE, CP_SOUND_GROUP_1);
+		//NCS사운드 부분
+		music.isPlay = 1;
+	}
 
 	CP_Graphics_ClearBackground(g_colors.current_color);
-
 	CP_Settings_TextAlignment(Horizontal, Vertical);
 	CP_Settings_TextSize(160);
-
 
 	//MOVE
 	//FindClosestHexa
@@ -89,19 +100,13 @@ void game_update(void)
 		rotate_wall(g_wall_hexa, &g_angle);
 		rotate_wall(g_efhexa, &g_angle);
 		rotate_wall(g_big_efhexa, &g_angle);
-
 		move_char(&g_char);
-
 
 		for (int i = 0; i < WallNumber; i++) 
 		{
 			move_walls(&g_wall_hexa[i], normal, wall_speed.wallspeed);// rotation_Time과 동일하게 할 것. 변수로 변경 대기시간 10초로 하기 위함
 			//여기가 속도
 		}
-
-		
-
-
 
 		for (int i = 0; i < 6; i++)
 		{
@@ -140,7 +145,6 @@ void game_update(void)
 	make_wall_color(&g_colors, &g_angle);
 	CP_Settings_Stroke(g_colors.bright_current);
 	draw_line(&g_wall_hexa[0]);
-
 	for (int i = 0; i < WallNumber; i++)
 	{
 		CP_Settings_Stroke(g_colors.bright_current);
@@ -263,12 +267,12 @@ void game_update(void)
 
 		if (CP_Input_MouseClicked()) 
 		{
-			if (CP_Input_GetMouseX() > 390 && CP_Input_GetMouseX() < 690 && CP_Input_GetMouseY() > 650 && CP_Input_GetMouseX() < 750) 
+			if (CP_Input_GetMouseX() > 390 && CP_Input_GetMouseX() < 690 && CP_Input_GetMouseY() > 650 && CP_Input_GetMouseX() < 750)
 			{
 				g_char.Alive = 1;
+				music.isPlay = 0;
 				CP_Engine_SetNextGameStateForced(game_init, game_update, game_exit);
 			}
-
 			if (CP_Input_GetMouseX() > 390 && CP_Input_GetMouseX() < 690 && CP_Input_GetMouseY() > 800 && CP_Input_GetMouseX() < 900) 
 			{
 				CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
@@ -276,10 +280,21 @@ void game_update(void)
 
 
 		}
-
+		//키보드로 게임 시작, 메인메뉴
+		if (CP_Input_KeyTriggered(KEY_SPACE))
+		{
+			g_char.Alive = 1;
+			music.isPlay = 0;
+			CP_Engine_SetNextGameStateForced(game_init, game_update, game_exit);
+		}
+		if (CP_Input_KeyTriggered(KEY_ESCAPE))
+		{
+			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
+		}
 	}
 }
 
 void game_exit(void)
 {
+	CP_Sound_Free(&mySound);
 }

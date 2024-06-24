@@ -4,7 +4,6 @@
 #include "utils.h"
 #include "draw.h"
 
-
 void rotate_wall(struct HEXAGON* hexagon, struct RANDOMANGLE* angle)
 {
 	if (angle->rotation_Time >= 10) // 18초 경과시
