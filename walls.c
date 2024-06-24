@@ -166,7 +166,6 @@ struct HEXAGON* find_empty_hexa(struct HEXAGON* hexagon, int size)
 	return NULL;
 }
 
-
 void make_effect(int area)
 {
 	struct HEXAGON* empty_hexa = find_empty_hexa(g_efhexa, 6);

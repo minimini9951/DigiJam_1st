@@ -18,10 +18,7 @@ void randomize(int arr[], int n)
         swap(&arr[i], &arr[j]);
     }
 }
-/*
-int g_arr[6] = { 0, 1, 2, 3, 4, 5 };
-int g_n = sizeof(g_arr) / sizeof(g_arr[0]);
-*/
+
 float lerp(float a, float b, float v)
 {
     return a + v * (b - a);

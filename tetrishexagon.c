@@ -61,7 +61,7 @@ void game_init(void)
 	g_colors.col_sec = 0.0f;
 	make_wall_color(&g_colors, &g_angle);
 
-	wall_speed.wallspeed = 6;
+	wall_speed.wallspeed = 10;
 	g_angle.rotation_Time = -1 * wall_speed.wallspeed; //-6은 처음대기시간. 변수로 바꿀것
 }
 void game_update(void)
@@ -140,6 +140,7 @@ void game_update(void)
 	make_wall_color(&g_colors, &g_angle);
 	CP_Settings_Stroke(g_colors.bright_current);
 	draw_line(&g_wall_hexa[0]);
+
 	for (int i = 0; i < WallNumber; i++)
 	{
 		CP_Settings_Stroke(g_colors.bright_current);
@@ -154,10 +155,13 @@ void game_update(void)
 
 	for (int i = 0; i < 6; i++)
 	{
+		CP_Settings_Stroke(g_colors.bright_current);
 		int count = check_count(&g_efhexa[i]);
 		if (count >= 1 && count < 6)
+		{
 			CP_Settings_StrokeWeight(4.0f);
 			draw_walls(&g_efhexa[i], 1);
+		}
 
 		CP_Settings_Stroke(g_colors.big_current);
 		CP_Settings_StrokeWeight(5.0f);
