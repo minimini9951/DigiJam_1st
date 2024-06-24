@@ -182,7 +182,7 @@ void game_update(void)
 	{
 		CP_Settings_TextSize(100);
 		//성공(읽는 파트,쓰기 파트 성공), g_char.total_Time 게임 첫 스타트
-		FILE* fp;
+		//FILE* fp;
 		float value = 0.000f;
 		char read_txt[16] = { 0 };//txt파일에 있는 값만 읽어서 저장하는 배열
 		char BestRead[16] = { 0 };//갱신해야 할 값 저장하는  배열
@@ -215,61 +215,64 @@ void game_update(void)
 		sprintf_s(user, 255, "%s\\Documents\\DigiPen\\HexRis\\BestTime.txt", b);
 
 
-		FILE* file_ptr = fopen(user, "w");
-		fclose(file_ptr);	
-
-		fopen_s(&fp, user, "r+");
-		if (fp != NULL)
+		FILE* file_ptr = NULL;
+		if (stat(user, &sfileInfo) == -1)
+		{
+			fopen_s(&file_ptr,user, "w");
+			fclose(file_ptr);
+		}
+		fopen_s(&file_ptr, user, "r+");
+		if (file_ptr != NULL)
 		{
 
-			if (fgets(read_txt, sizeof(read_txt), fp) == 0)
+			if (fgets(read_txt, sizeof(read_txt), file_ptr) == 0)
 			{
-				fclose(fp);
-				fopen_s(&fp, user, "w+");
-				fprintf(fp, "%.2f", value);
-				fclose(fp);
+				fclose(file_ptr);
+				fopen_s(&file_ptr, user, "w+");
+				fprintf(file_ptr, "%.2f", value);
+				fclose(file_ptr);
 			}
 			else
 			{
-				fgets(read_txt, sizeof(read_txt), fp);
+				fgets(read_txt, sizeof(read_txt), file_ptr);
 				g_char.Best_TimeTXT = (float)atof(read_txt);
-				fclose(fp);
+				fclose(file_ptr);
 			}
 		}
 
 		if (g_char.Best_TimeTXT<g_char.total_Time)
 		{
-			fopen_s(&fp, user, "r+");
+			fopen_s(&file_ptr, user, "r+");
 
-			if (fp != NULL) 
+			if (file_ptr != NULL) 
 			{
-				fprintf_s(fp, "%.2f", g_char.total_Time);
-				fclose(fp);
+				fprintf_s(file_ptr, "%.2f", g_char.total_Time);
+				fclose(file_ptr);
 			}
 
-			fopen_s(&fp, user, "r+");
-			if (fp != NULL)
+			fopen_s(&file_ptr, user, "r+");
+			if (file_ptr != NULL)
 			{
 				DrawRect_GameOver(g_colors.current_color, g_colors.bright_current, 150, 500, 680, 100);
 				CP_Settings_Fill(white);
-				fgets(BestRead, sizeof(BestRead), fp);
+				fgets(BestRead, sizeof(BestRead), file_ptr);
 				CP_Font_DrawText("Best Time:", 380, 550);
 				CP_Font_DrawText(BestRead, 720, 550);
-				fclose(fp);
+				fclose(file_ptr);
 			}
 		}
 		else
 		{
 			//성공한 테스트 부분
-			fopen_s(&fp, user, "r+");
-			if (fp != NULL)
+			fopen_s(&file_ptr, user, "r+");
+			if (file_ptr != NULL)
 			{
 				DrawRect_GameOver(g_colors.current_color, g_colors.bright_current, 150, 500, 680, 100);
 				CP_Settings_Fill(white);
-				fgets(PastBest, sizeof(PastBest), fp);
+				fgets(PastBest, sizeof(PastBest), file_ptr);
 				CP_Font_DrawText("Best Time:", 380, 550);
 				CP_Font_DrawText(PastBest, 720, 550);
-				fclose(fp);
+				fclose(file_ptr);
 			}
 		}
 
