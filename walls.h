@@ -52,6 +52,12 @@ struct Speed
 	float wallspeed;
 };
 
+struct Music 
+{
+	int isPlay;
+	int buttonPlay;
+};
+
 
 int walls_count();
 void walls_position(struct HEXAGON* hexagon, int random_number);

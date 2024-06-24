@@ -11,6 +11,7 @@ struct COLORS
 	CP_Color current_color;
 	CP_Color big_current;
 	CP_Color bright_current;
+	CP_Color inverse_current;
 
 	int first;
 	float col_sec;

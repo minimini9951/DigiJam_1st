@@ -19,7 +19,7 @@ void InitializeColor(struct COLORS* color)
 		color->current_color = color->start_color;
 		color->big_current = CP_Color_Create(color->current_color.r + color->v / 5, color->current_color.g + color->v / 5, color->current_color.b + color->v / 5, color->current_color.a);
 		color->bright_current = CP_Color_Create(color->current_color.r + color->v, color->current_color.g + color->v, color->current_color.b + color->v, color->current_color.a);
-
+		color->inverse_current = CP_Color_Create(255 - color->current_color.r - color->v, 255 - color->current_color.g - color->v, 255 - color->current_color.b - color->v, color->current_color.a);
 		color->first = 1;
 	}
 	else
