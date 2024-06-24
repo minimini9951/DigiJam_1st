@@ -24,7 +24,7 @@ CP_Font myFont;
 CP_TEXT_ALIGN_HORIZONTAL horizontal = CP_TEXT_ALIGN_H_CENTER;
 CP_TEXT_ALIGN_VERTICAL vertical = CP_TEXT_ALIGN_V_MIDDLE;
 
-struct Image image;
+//struct Image image;
 
 void DrawRect(CP_Color color, float x, float y, float w, float h) 
 {
@@ -37,30 +37,19 @@ void Main_Menu_Init(void)
 
 	int display_height = CP_System_GetDisplayHeight();
 	CP_System_SetWindowSize(display_height, display_height);
-
 	myFont = CP_Font_Load("./Assets/Exo2-Regular.ttf");
-
 	Button = CP_Sound_LoadMusic("./Assets/button-sound.mp3");
-
-	image.logo = CP_Image_Load("./Assets/DigiPen_WHITE.png");
 	button_music.buttonPlay = 0;
-	image.sec = 0.0f;
-	image.v = 0.0f;
 }
 
-void Main_Menu_Update(void) 
+void Main_Menu_Update(void)
 {
-	image.sec += CP_System_GetDt();
-	image.v += image.sec / 16;
 	CP_Color color_red = CP_Color_Create(225, 0, 0, 255);//»¡°£»ö ÀúÀå
 	CP_Color color_black = CP_Color_Create(30, 30, 30, 255);
 	CP_Graphics_ClearBackground(color_black);
 	CP_Color color_white = CP_Color_Create(225, 225, 225, 255);
 	float mouseX = CP_Input_GetMouseX();
 	float mouseY = CP_Input_GetMouseY();
-	if (image.sec <= 2)
-		CP_Image_Draw(image.logo, 540, 540, 1026, 249, (int)lerp(0, 255, image.v));
-	else
 	{
 		if (mouseX > DisplayLength - (Base / 2) && mouseX < DisplayLength + (Base / 2) && mouseY>600 && mouseY < 700)
 		{
@@ -107,18 +96,12 @@ void Main_Menu_Update(void)
 		CP_Settings_Fill(color_black);
 		CP_Font_DrawText("Exit", DisplayLength, 800);
 		CP_Settings_TextAlignment(horizontal, vertical);
+
+		CP_Settings_Fill(color_white);
 	}
-	CP_Settings_Fill(color_white);
+
 }
-
-
 void Main_Menu_Exit(void)
 {
 	CP_Sound_Free(&Button);
-}
-int main(void)
-{
-	CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
-	CP_Engine_Run();
-	return 0;
 }

@@ -21,6 +21,7 @@ struct RANDOMANGLE g_angle;
 struct COLORS g_colors;
 struct Music music;
 struct Speed wall_speed;
+struct Image image;
 
 int amplitude = 4;
 int frequency = 2;

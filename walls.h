@@ -57,6 +57,7 @@ struct Image
 	CP_Image logo;
 	float sec;
 	float v;
+	int first;
 };
 
 struct Music 

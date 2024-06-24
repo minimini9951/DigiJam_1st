@@ -25,6 +25,9 @@
     <ClCompile Include="color.c">
       <Filter>Source file</Filter>
     </ClCompile>
+    <ClCompile Include="Logo.c">
+      <Filter>Source file</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header file">
@@ -57,6 +60,9 @@
       <Filter>Header file</Filter>
     </ClInclude>
     <ClInclude Include="color.h">
+      <Filter>Header file</Filter>
+    </ClInclude>
+    <ClInclude Include="Logo.h">
       <Filter>Header file</Filter>
     </ClInclude>
   </ItemGroup>
