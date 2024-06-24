@@ -63,7 +63,7 @@ void game_init(void)
 	g_colors.col_sec = 0.0f;
 	make_wall_color(&g_colors, &g_angle);
 
-	wall_speed.wallspeed = 6;
+	wall_speed.wallspeed = 4;
 	g_angle.rotation_Time = -1 * wall_speed.wallspeed; //-6은 처음대기시간. 변수로 바꿀것
 
 	//Load music
@@ -147,7 +147,7 @@ void game_update(void)
 	draw_line(&g_wall_hexa[0]);
 	for (int i = 0; i < WallNumber; i++)
 	{
-		CP_Settings_Stroke(g_colors.bright_current);
+		CP_Settings_Stroke(g_colors.inverse_current);
 		float stroke_length = amplitude * cosf(g_char.total_Time * (float)M_PI * frequency) + offset;
 		CP_Settings_StrokeWeight(stroke_length);
 		draw_walls(&g_wall_hexa[i], 0);
@@ -159,7 +159,7 @@ void game_update(void)
 
 	for (int i = 0; i < 6; i++)
 	{
-		CP_Settings_Stroke(g_colors.bright_current);
+		CP_Settings_Stroke(g_colors.inverse_current);
 		int count = check_count(&g_efhexa[i]);
 		if (count >= 1 && count < 6)
 		{
