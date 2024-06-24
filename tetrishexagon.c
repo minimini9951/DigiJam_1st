@@ -13,6 +13,10 @@
 #include <math.h>
 #define _CRT_SECURE_NO_WARNINGS
 
+#include<sys/stat.h>
+#include <sys/types.h>
+int mkdir(const char* path, int mode);
+
 struct HEXAGON g_wall_hexa[WallNumber];
 struct HEXAGON g_efhexa[6];
 struct HEXAGON g_big_efhexa[6];
@@ -184,14 +188,44 @@ void game_update(void)
 		char BestRead[16] = { 0 };//갱신해야 할 값 저장하는  배열
 		char PastBest[16] = { 0 };
 
-		fopen_s(&fp, "Assets/BestTime.txt", "r");
+		char* b;
+		size_t S = 255;
+		_dupenv_s(&b, &S, "USERPROFILE");
+		char user[255];
+
+		sprintf_s(user, 255, "%s\\Documents\\DigiPen", b);
+
+		struct stat sfileInfo;
+
+		//check directory exists or not
+		if (stat(user, &sfileInfo) == -1)
+		{
+			mkdir(user, 0700);
+			printf("[INFO] Directory Created: %s\n", user);
+		}
+
+		sprintf_s(user, 255, "%s\\Documents\\DigiPen\\HexRis", b);
+		//check directory exists or not
+		if (stat(user, &sfileInfo) == -1)
+		{
+			mkdir(user, 0700);
+			printf("[INFO] Directory Created: %s\n", user);
+		}
+
+		sprintf_s(user, 255, "%s\\Documents\\DigiPen\\HexRis\\BestTime.txt", b);
+
+
+		FILE* file_ptr = fopen(user, "w");
+		fclose(file_ptr);	
+
+		fopen_s(&fp, user, "r+");
 		if (fp != NULL)
 		{
 
 			if (fgets(read_txt, sizeof(read_txt), fp) == 0)
 			{
 				fclose(fp);
-				fopen_s(&fp, "Assets/BestTime.txt", "w");
+				fopen_s(&fp, user, "w+");
 				fprintf(fp, "%.2f", value);
 				fclose(fp);
 			}
@@ -205,7 +239,7 @@ void game_update(void)
 
 		if (g_char.Best_TimeTXT<g_char.total_Time)
 		{
-			fopen_s(&fp, "Assets/BestTime.txt", "w");
+			fopen_s(&fp, user, "r+");
 
 			if (fp != NULL) 
 			{
@@ -213,7 +247,7 @@ void game_update(void)
 				fclose(fp);
 			}
 
-			fopen_s(&fp, "Assets/BestTime.txt", "r");
+			fopen_s(&fp, user, "r+");
 			if (fp != NULL)
 			{
 				DrawRect_GameOver(g_colors.current_color, g_colors.bright_current, 150, 500, 680, 100);
@@ -227,7 +261,7 @@ void game_update(void)
 		else
 		{
 			//성공한 테스트 부분
-			fopen_s(&fp, "Assets/BestTime.txt", "r");
+			fopen_s(&fp, user, "r+");
 			if (fp != NULL)
 			{
 				DrawRect_GameOver(g_colors.current_color, g_colors.bright_current, 150, 500, 680, 100);
