@@ -37,6 +37,7 @@ void Main_Menu_Init(void)
 
 	int display_height = CP_System_GetDisplayHeight();
 	CP_System_SetWindowSize(display_height, display_height);
+	CP_System_SetWindowTitle("Hex_Ris");
 	myFont = CP_Font_Load("./Assets/Exo2-Regular.ttf");
 	Button = CP_Sound_LoadMusic("./Assets/button-sound.mp3");
 	button_music.buttonPlay = 0;

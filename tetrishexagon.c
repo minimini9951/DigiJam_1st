@@ -44,6 +44,7 @@ void game_init(void)
 	int display_height = CP_System_GetDisplayHeight();
 	const float k = 1;
 	CP_System_SetWindowSize(display_height, display_height);
+	CP_System_SetWindowTitle("Hex_Ris");
 	g_angle.random_angle = 60;
 	for (int i = 0; i < WallNumber; i++)
 	{

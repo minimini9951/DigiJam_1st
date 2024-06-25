@@ -23,6 +23,7 @@ void Logo_Init(void)
 {
 	int display_height = CP_System_GetDisplayHeight();
 	CP_System_SetWindowSize(display_height, display_height);
+	CP_System_SetWindowTitle("Hex_Ris");
 	image.logo = CP_Image_Load("./Assets/DigiPen_WHITE.png");
 	image.sec = 0.0f;
 	image.v = 0.0f;
